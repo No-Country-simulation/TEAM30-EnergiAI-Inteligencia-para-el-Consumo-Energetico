@@ -1,0 +1,1 @@
+Carpeta destinada a los notebooks y exploración de datos del equipo
