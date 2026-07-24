@@ -31,6 +31,24 @@ manifest_cd3.json
 - Especificación estructurada de datasets, objetivos, predictores
   y estrategia de partición.
 
+
+## FEATURE ENGINEERING
+
+feature_engineering.ipynb
+
+- Notebook reproducible del proceso de Feature Engineering de CD2.
+- Utiliza directamente los datasets RAW oficiales almacenados en:
+  `analisis_datos/data/raw/`
+- Construye las variables temporales y cíclicas utilizadas por los modelos.
+- Genera las variables derivadas requeridas para Smart Home y UCI.
+- Conserva la estrategia de partición definida para cada dataset:
+  - Smart Home: partición aleatoria reproducible 80/20 con random_state=42.
+  - UCI: partición cronológica 80/20 para evitar fuga de información futura.
+- Incluye pruebas automáticas de integridad.
+- La ejecución completa fue validada desde cero utilizando exclusivamente
+  los archivos RAW disponibles en el repositorio.
+- Todas las pruebas de integridad fueron superadas correctamente.
+
 ## IMPORTANTE PARA CD3
 
 No volver a realizar la división TRAIN/TEST.
