@@ -1,0 +1,61 @@
+{
+    "project": "Sistema Inteligente para el Análisis de Consumo Energético",
+    "source": "CD2",
+    "destination": "CD3",
+    "datasets": {
+        "smart_home": {
+            "train_file": "data/smart_home_train.csv",
+            "test_file": "data/smart_home_test.csv",
+            "target": "Energy Consumption (kWh)",
+            "split": "random_80_20",
+            "random_state": 42,
+            "train_rows": 80000,
+            "test_rows": 20000,
+            "predictors": [
+                "Outdoor Temperature (°C)",
+                "Household Size",
+                "is_weekend",
+                "hour_sin",
+                "hour_cos",
+                "dow_sin",
+                "dow_cos",
+                "month_sin",
+                "month_cos",
+                "appliance_Air Conditioning",
+                "appliance_Computer",
+                "appliance_Dishwasher",
+                "appliance_Fridge",
+                "appliance_Heater",
+                "appliance_Lights",
+                "appliance_Microwave",
+                "appliance_Oven",
+                "appliance_TV",
+                "appliance_Washing Machine",
+                "is_peak_hour"
+            ]
+        },
+        "uci": {
+            "train_file": "data/uci_train.csv",
+            "test_file": "data/uci_test.csv",
+            "target": "Global_active_power",
+            "split": "chronological_80_20",
+            "train_rows": 835604,
+            "test_rows": 208902,
+            "predictors": [
+                "Global_reactive_power",
+                "Voltage",
+                "Sub_metering_1",
+                "Sub_metering_2",
+                "Sub_metering_3",
+                "is_weekend",
+                "hour_sin",
+                "hour_cos",
+                "dow_sin",
+                "dow_cos",
+                "month_sin",
+                "month_cos",
+                "is_peak_hour"
+            ]
+        }
+    }
+}
