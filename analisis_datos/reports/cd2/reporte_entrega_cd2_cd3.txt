@@ -1,0 +1,410 @@
+
+# REPORTE DE ENTREGA CD2 → CD3
+
+## Sistema Inteligente para el Análisis de Consumo Energético
+
+Rol responsable:
+Científico de Datos 2 (CD2)
+
+Fecha de generación:
+2026-07-24 19:22:41
+
+
+============================================================
+1. OBJETIVO DEL TRABAJO DE CD2
+============================================================
+
+El trabajo de CD2 consistió en auditar, preparar, transformar y
+seleccionar las variables de los datasets Smart Home y UCI Household
+Power Consumption para dejarlos en condiciones adecuadas para las
+etapas posteriores de modelado.
+
+Durante el proceso se verificaron:
+
+- estructura de los datasets;
+- tipos de datos;
+- valores faltantes;
+- patrones de ausencia;
+- consistencia temporal;
+- duplicados;
+- rangos de variables;
+- variables categóricas;
+- relaciones entre variables eléctricas;
+- redundancia entre predictores;
+- variables temporales;
+- variables derivadas;
+- selección de variables predictoras;
+- variable objetivo;
+- estrategia de partición TRAIN/TEST.
+
+
+============================================================
+2. DATASET SMART HOME
+============================================================
+
+Registros procesados:
+100000
+
+Variable objetivo:
+Energy Consumption (kWh)
+
+Variables predictoras seleccionadas:
+20
+
+Preparación realizada:
+
+- Conversión y validación de fecha y hora.
+- Extracción de características temporales.
+- Creación de variables cíclicas mediante seno y coseno.
+- Creación de indicador is_weekend.
+- Creación de indicador is_peak_hour.
+- Codificación One-Hot de Appliance Type.
+- Evaluación de Household Size.
+- Evaluación de Outdoor Temperature (°C).
+- Validación de categorías de Appliance Type y Season.
+- Comprobación de duplicados y valores faltantes.
+
+Appliance Type contiene 10 categorías válidas.
+
+La variable Season fue utilizada durante la auditoría, pero no se
+incorporó directamente como predictor final debido a que su información
+temporal queda representada mediante las características cíclicas
+derivadas del calendario.
+
+Partición:
+
+TRAIN:
+80000 registros
+
+TEST:
+20000 registros
+
+Estrategia:
+Partición aleatoria reproducible 80/20.
+
+random_state:
+42
+
+
+============================================================
+3. DATASET UCI HOUSEHOLD POWER CONSUMPTION
+============================================================
+
+Registros originales:
+1048575
+
+Registros eliminados:
+4069
+
+Porcentaje eliminado:
+0.3881 %
+
+Registros finales:
+1044506
+
+Variable objetivo:
+Global_active_power
+
+Variables predictoras seleccionadas:
+13
+
+
+============================================================
+4. TRATAMIENTO DE DATOS FALTANTES UCI
+============================================================
+
+Durante la auditoría se detectaron 4069 registros con ausencia
+simultánea de las principales variables eléctricas.
+
+Las ausencias originales estaban representadas mediante el carácter
+'?' en:
+
+- Global_active_power
+- Global_reactive_power
+- Voltage
+- Global_intensity
+- Sub_metering_1
+- Sub_metering_2
+
+Sub_metering_3 presentó NaN en exactamente las mismas filas.
+
+Se comprobó que los patrones coincidían exactamente.
+
+El análisis temporal identificó 39 bloques de registros faltantes.
+
+El bloque de mayor tamaño contiene:
+
+3723 minutos consecutivos.
+
+Esto representa aproximadamente 62 horas de ausencia continua.
+
+DECISIÓN METODOLÓGICA:
+
+No realizar imputación automática.
+
+JUSTIFICACIÓN:
+
+La imputación de un intervalo temporal de aproximadamente 62 horas
+podría introducir información artificial y modificar las relaciones
+existentes entre consumo, intensidad, tensión y submedición.
+
+Debido al reducido porcentaje total de registros afectados (0.3881 %),
+se decidió eliminar las 4069 observaciones incompletas.
+
+Después de la eliminación:
+
+Nulos en variables eléctricas = 0.
+
+
+============================================================
+5. AUDITORÍA ELÉCTRICA UCI
+============================================================
+
+Se evaluaron:
+
+- Global_active_power
+- Global_reactive_power
+- Voltage
+- Global_intensity
+- Sub_metering_1
+- Sub_metering_2
+- Sub_metering_3
+
+Se detectó una correlación extremadamente alta entre:
+
+Global_active_power y Global_intensity ≈ 0.999
+
+El análisis mediante VIF confirmó una fuerte multicolinealidad.
+
+DECISIÓN:
+
+Global_intensity se excluye del conjunto predictor.
+
+JUSTIFICACIÓN:
+
+Su información resulta prácticamente redundante respecto a
+Global_active_power, que además constituye la variable objetivo.
+
+
+============================================================
+6. SUBMETERING
+============================================================
+
+Se conservaron:
+
+- Sub_metering_1
+- Sub_metering_2
+- Sub_metering_3
+
+Correlaciones observadas con Global_active_power:
+
+Sub_metering_1 ≈ 0.4741
+Sub_metering_2 ≈ 0.4567
+Sub_metering_3 ≈ 0.6241
+
+Los valores cero fueron conservados porque representan ausencia de
+consumo en el circuito correspondiente y no valores faltantes.
+
+
+============================================================
+7. VARIABLE ENERGÍA NO SUBMEDIDA
+============================================================
+
+Durante la auditoría se construyeron:
+
+Energia_Global_Wh
+Suma_Submetering_Wh
+Energia_No_Submedida_Wh
+
+Estas variables fueron utilizadas para evaluar la coherencia energética
+entre el consumo global y los submeterings.
+
+Se detectaron 998 residuos negativos.
+
+Esto representa aproximadamente:
+
+0.0955 % del dataset limpio.
+
+La mayoría de estas diferencias fueron pequeñas y se interpretaron como
+residuos derivados de resolución, redondeo y sincronización de las
+mediciones.
+
+Estas variables se consideran variables de auditoría y NO forman parte
+del conjunto predictor final.
+
+
+============================================================
+8. INGENIERÍA TEMPORAL
+============================================================
+
+Se generaron características temporales:
+
+- hour
+- month
+- day_of_week
+- is_weekend
+
+Además se construyeron representaciones cíclicas:
+
+- hour_sin
+- hour_cos
+- dow_sin
+- dow_cos
+- month_sin
+- month_cos
+
+Esto permite representar adecuadamente la naturaleza periódica de:
+
+- hora del día;
+- día de la semana;
+- mes del año.
+
+También se creó:
+
+is_peak_hour
+
+como indicador de pertenencia a los horarios identificados como
+periodos de mayor consumo.
+
+
+============================================================
+9. PARTICIÓN TEMPORAL UCI
+============================================================
+
+La partición de UCI NO se realizó aleatoriamente.
+
+Se aplicó una división cronológica 80/20 para evitar fuga de
+información futura hacia el entrenamiento.
+
+TRAIN:
+
+Inicio:
+2006-12-16 17:24:00
+
+Fin:
+2008-07-21 17:52:00
+
+Registros:
+835604
+
+TEST:
+
+Inicio:
+2008-07-21 17:53:00
+
+Fin:
+2008-12-13 21:38:00
+
+Registros:
+208902
+
+Separación entre último TRAIN y primer TEST:
+
+1 minuto.
+
+Comprobación:
+
+Todos los registros TRAIN ocurren antes de los registros TEST.
+
+
+============================================================
+10. VARIABLES FINALES
+============================================================
+
+SMART HOME
+
+Objetivo:
+
+Energy Consumption (kWh)
+
+Predictores:
+
+- Outdoor Temperature (°C)
+- Household Size
+- is_weekend
+- hour_sin
+- hour_cos
+- dow_sin
+- dow_cos
+- month_sin
+- month_cos
+- appliance_Air Conditioning
+- appliance_Computer
+- appliance_Dishwasher
+- appliance_Fridge
+- appliance_Heater
+- appliance_Lights
+- appliance_Microwave
+- appliance_Oven
+- appliance_TV
+- appliance_Washing Machine
+- is_peak_hour
+
+
+UCI
+
+Objetivo:
+
+Global_active_power
+
+Predictores:
+
+- Global_reactive_power
+- Voltage
+- Sub_metering_1
+- Sub_metering_2
+- Sub_metering_3
+- is_weekend
+- hour_sin
+- hour_cos
+- dow_sin
+- dow_cos
+- month_sin
+- month_cos
+- is_peak_hour
+
+
+============================================================
+11. ARTEFACTOS GENERADOS
+============================================================
+
+data/smart_home_train.csv
+data/smart_home_test.csv
+data/uci_train.csv
+data/uci_test.csv
+
+
+============================================================
+12. VALIDACIÓN FINAL
+============================================================
+
+SMART HOME TRAIN:
+80000 registros
+21 columnas
+0 valores nulos
+
+SMART HOME TEST:
+20000 registros
+21 columnas
+0 valores nulos
+
+UCI TRAIN:
+835604 registros
+15 columnas
+0 valores nulos
+
+UCI TEST:
+208902 registros
+15 columnas
+0 valores nulos
+
+Variables objetivo verificadas.
+
+Integridad temporal UCI verificada.
+
+Estado final:
+
+CD2 COMPLETADO.
+
+Los artefactos quedan preparados para ser entregados al
+Científico de Datos 3 (CD3).

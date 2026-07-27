@@ -1,0 +1,1 @@
+analisis_datos/notebooks/cd2/data/uci_train.csv filter=lfs diff=lfs merge=lfs -text
