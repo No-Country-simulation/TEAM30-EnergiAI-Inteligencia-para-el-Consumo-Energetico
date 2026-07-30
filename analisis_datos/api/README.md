@@ -50,3 +50,9 @@ El microservicio define sus contratos mediante modelos Pydantic.
 - ahorro_potencial_mensual
 - ahorro_potencial_anual
 - recomendaciones
+
+## Predictor
+
+Actualmente el microservicio utiliza un predictor simulado (`PredictionService`) que devuelve una respuesta fija para permitir el desarrollo e integración con el Backend mientras CD3 finaliza el modelo de Machine Learning.
+
+Cuando el archivo `modelo.pkl` esté disponible, únicamente se reemplazará la implementación interna del servicio, manteniendo el mismo contrato de entrada y salida.
