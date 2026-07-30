@@ -21,3 +21,10 @@ El microservicio sigue una arquitectura por capas:
 - **core/**: configuración y componentes transversales.
 - **utils/**: funciones auxiliares reutilizables.
 - **tests/**: pruebas del microservicio.
+
+## Ejecución
+
+Instalar dependencias:
+
+```bash
+pip install -r requirements.txt
