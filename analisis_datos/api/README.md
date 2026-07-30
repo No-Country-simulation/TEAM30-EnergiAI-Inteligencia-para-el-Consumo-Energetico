@@ -28,3 +28,25 @@ Instalar dependencias:
 
 ```bash
 pip install -r requirements.txt
+
+## Contrato de datos
+
+El microservicio define sus contratos mediante modelos Pydantic.
+
+### Entrada
+
+- consumo_kwh
+- cantidad_personas
+- cantidad_equipos
+- temperatura_exterior
+- uso_horario_pico
+
+### Salida
+
+- categoria
+- iee
+- probabilidad
+- costo_estimado_mensual
+- ahorro_potencial_mensual
+- ahorro_potencial_anual
+- recomendaciones
