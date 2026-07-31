@@ -112,12 +112,12 @@ graph TD
 *   **Partición Train/Test:** Generación de la nueva división (80/20) asegurando que no existan hogares repetidos entre conjuntos.
 *   **Validaciones:** Verificación de tipos de datos, ausencia de nulos y consistencia de variables.
 
-### CD3 (Científico de Datos 3) 🔄 *[En espera de datos de CD2]*
-*(Esta sección se completará cuando CD3 entregue el modelo)*
-*   Construcción del Índice de Eficiencia Energética (IEE).
-*   Variables utilizadas para el entrenamiento.
-*   Algoritmos evaluados y modelo seleccionado.
-*   Métricas de desempeño.
+### CD3 (Científico de Datos 3) 🔄 *[En desarrollo]*
+*   **Construcción metodológica del IEE:** Selección de variables clave para el índice (`consumo_kwh`, `cantidad_equipos`, `temperatura_exterior`, `uso_horario_pico`).
+*   **Normalización y Ponderación:** Aplicación de técnicas de escalado (ej. Min-Max o StandardScaler) y asignación de pesos técnicos para cada variable.
+*   **Definición de categorías:** Cálculo del índice en una escala de 0 a 100 y creación de las etiquetas objetivo (Eficiente, Moderado, Ineficiente) basadas en la distribución real de los datos.
+*   **Entrenamiento y Evaluación:** Uso exclusivo de `smart_home_train.csv` para entrenar y `smart_home_test.csv` para evaluar y comparar distintos algoritmos de clasificación.
+*   **Generación de Entregables:** Creación del notebook de modelado (`modelado.ipynb`), archivo de métricas (`metricas_modelos.csv`), modelo exportado (`modelo.pkl`) y el reporte metodológico oficial (`reporte_cd3.pdf`).
 
 ### CD4 (Científico de Datos 4) ⏳ *[Pendiente]*
 *(Esta sección se completará cuando CD4 finalice la integración)*
@@ -159,8 +159,8 @@ flowchart LR
 | Etapa | Responsable | Estado |
 | :--- | :--- | :--- |
 | Análisis Exploratorio (EDA) | CD1 | ✅ Finalizado |
-| Agrupación por Hogar y Variables | CD2 | 🔄 En desarrollo (Ajuste) |
-| Construcción IEE y Modelado | CD3 | ⏳ Pendiente de CD2 |
+| Agrupación por Hogar y Variables | CD2 | ✅ Finalizado |
+| Construcción IEE y Modelado | CD3 | 🔄 En desarrollo |
 | Microservicio y Recomendaciones | CD4 | ⏳ Pendiente |
 
 ---
@@ -170,11 +170,11 @@ flowchart LR
 Esta sección queda estructurada y preparada para incorporar los resultados a medida que avancen las siguientes fases del proyecto. No se inventará información; se actualizará cuando CD3 y CD4 liberen sus entregables.
 
 ### Resultados del Modelo (CD3)
-*   **Construcción del IEE:** Fórmula y variables finales utilizadas.
-*   **Resultados del modelo:** Algoritmo seleccionado.
-*   **Métricas:** Accuracy, Precision, Recall y F1-Score.
-*   **Matriz de confusión:** Evaluación sobre el conjunto de pruebas.
-*   **Importancia de variables:** Gráfico de *Feature Importance*.
+*   **Documentación del IEE (`reporte_cd3.pdf`):** Metodología completa detallando la normalización, justificación de los pesos asignados y la fórmula final del índice.
+*   **Criterios de Clasificación:** Justificación estadística de los rangos utilizados para definir si un hogar es Eficiente, Moderado o Ineficiente.
+*   **Selección del Modelo:** Comparación de algoritmos evaluados, selección del mejor modelo y reporte de sus métricas de desempeño.
+*   **Importancia de variables:** Gráfico y análisis de *Feature Importance*.
+*   **Recomendaciones para CD4:** Sugerencias y consideraciones técnicas para la posterior integración con el microservicio.
 
 ### Integración y Lógica de Negocio (CD4)
 *   **Integración con FastAPI:** Explicación de los endpoints del microservicio.
