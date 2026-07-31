@@ -12,6 +12,12 @@ class Settings(BaseSettings):
     app_version: str = "1.0.0"
 
     energy_price: float = 0.55
+    
+    efficient_savings: float = 0.05
+
+    moderate_savings: float = 0.10
+
+    inefficient_savings: float = 0.20
 
     model_path: str = "../models/modelo.pkl"
 

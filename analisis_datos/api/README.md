@@ -70,3 +70,11 @@ Actualmente implementa:
 - Generación de una explicación del resultado.
 
 Este servicio no modifica la salida del modelo de Machine Learning; únicamente la complementa con información de negocio.
+
+## Endpoint principal
+
+### POST /analisis-energetico
+
+Recibe la información del hogar, ejecuta la predicción del modelo de Machine Learning y aplica las reglas de negocio para devolver un análisis energético completo.
+
+Actualmente utiliza un predictor simulado. Cuando el modelo entrenado (`modelo.pkl`) esté disponible, solo se reemplazará la implementación interna del `PredictionService`, manteniendo el mismo contrato de entrada y salida.

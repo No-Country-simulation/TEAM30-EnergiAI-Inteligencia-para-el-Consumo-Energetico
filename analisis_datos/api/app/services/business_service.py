@@ -84,18 +84,31 @@ class BusinessService:
         Calcula el ahorro potencial mensual según la categoría.
         """
 
-        percentages = {
-            "Eficiente": 0.05,
-            "Moderado": 0.10,
-            "Ineficiente": 0.20,
-        }
-
-        percentage = percentages.get(category, 0)
+        percentage = self._get_savings_percentage(category)
 
         return round(
             monthly_cost * percentage,
             2,
         )
+
+    def _get_savings_percentage(
+        self,
+        category: str,
+    ) -> float:
+        """
+        Obtiene el porcentaje de ahorro según la categoría energética.
+        """
+
+        if category == "Eficiente":
+            return self.settings.efficient_savings
+
+        if category == "Moderado":
+            return self.settings.moderate_savings
+
+        if category == "Ineficiente":
+            return self.settings.inefficient_savings
+
+        return 0.0
 
     def _calculate_yearly_savings(
         self,

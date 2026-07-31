@@ -1,15 +1,15 @@
-"""Punto de entrada de la aplicación."""
+"""
+Punto de entrada de la aplicación FastAPI.
+"""
 
 from fastapi import FastAPI
 
-from app.core.config import get_settings
-from app.core.logging import configure_logging
-
-configure_logging()
-
-settings = get_settings()
+from app.routers.analisis import router as analysis_router
 
 app = FastAPI(
-    title=settings.app_name,
-    version=settings.app_version,
+    title="EnergiAI API",
+    version="1.0.0",
+    description="Microservicio de Inteligencia Artificial para el análisis energético.",
 )
+
+app.include_router(analysis_router)
