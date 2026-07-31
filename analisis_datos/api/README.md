@@ -56,3 +56,17 @@ El microservicio define sus contratos mediante modelos Pydantic.
 Actualmente el microservicio utiliza un predictor simulado (`PredictionService`) que devuelve una respuesta fija para permitir el desarrollo e integración con el Backend mientras CD3 finaliza el modelo de Machine Learning.
 
 Cuando el archivo `modelo.pkl` esté disponible, únicamente se reemplazará la implementación interna del servicio, manteniendo el mismo contrato de entrada y salida.
+
+## BusinessService
+
+El `BusinessService` aplica las reglas de negocio definidas por CD4.
+
+Actualmente implementa:
+
+- Cálculo del costo estimado mensual.
+- Cálculo del ahorro potencial mensual.
+- Cálculo del ahorro potencial anual.
+- Generación de recomendaciones.
+- Generación de una explicación del resultado.
+
+Este servicio no modifica la salida del modelo de Machine Learning; únicamente la complementa con información de negocio.
