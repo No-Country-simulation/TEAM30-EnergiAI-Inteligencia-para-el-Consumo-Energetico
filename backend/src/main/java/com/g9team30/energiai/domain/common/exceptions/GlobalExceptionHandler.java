@@ -1,5 +1,6 @@
 package com.g9team30.energiai.domain.common.exceptions;
 
+import com.g9team30.energiai.domain.analisis.dto.response.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,17 +11,25 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.List;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity getionarError404() {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<ErrorResponse> gestionarError404(EntityNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Recurso no encontrado",
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity getionarError400(MethodArgumentNotValidException ex) {
+    public ResponseEntity<List<DatosErrorValidacion>> gestionarError400(MethodArgumentNotValidException ex) {
         var errores = ex.getFieldErrors();
-        return ResponseEntity.badRequest().body(errores.stream().map(DatosErrorValidacion::new).toList());
+        return ResponseEntity.badRequest()
+                .body(errores.stream().map(DatosErrorValidacion::new).toList());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
