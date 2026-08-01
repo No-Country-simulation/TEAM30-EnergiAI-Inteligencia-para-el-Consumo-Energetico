@@ -90,3 +90,9 @@ Actualmente contempla:
 - Errores internos del servidor (500).
 
 Todos los errores son registrados mediante el sistema de logging de la aplicación.
+
+## Logging
+
+La aplicación implementa una configuración centralizada de logging mediante el módulo estándar `logging` de Python.
+
+Todos los componentes utilizan la misma configuración para registrar eventos relevantes, advertencias y errores, facilitando el monitoreo y la depuración del microservicio.
