@@ -78,3 +78,15 @@ Este servicio no modifica la salida del modelo de Machine Learning; únicamente 
 Recibe la información del hogar, ejecuta la predicción del modelo de Machine Learning y aplica las reglas de negocio para devolver un análisis energético completo.
 
 Actualmente utiliza un predictor simulado. Cuando el modelo entrenado (`modelo.pkl`) esté disponible, solo se reemplazará la implementación interna del `PredictionService`, manteniendo el mismo contrato de entrada y salida.
+
+## Manejo de excepciones
+
+La API implementa un manejo global de excepciones para garantizar respuestas consistentes.
+
+Actualmente contempla:
+
+- Errores de validación (422).
+- Excepciones HTTP controladas.
+- Errores internos del servidor (500).
+
+Todos los errores son registrados mediante el sistema de logging de la aplicación.
