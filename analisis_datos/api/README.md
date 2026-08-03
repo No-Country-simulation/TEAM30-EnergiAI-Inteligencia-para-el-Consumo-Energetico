@@ -1,98 +1,177 @@
-# EnergiAI API
+# ⚡ EnergiAI API - Microservicio de Inferencia
 
-Microservicio de inferencia desarrollado por CD4 para el proyecto EnergiAI.
+> Microservicio desarrollado por el **TEAM30** para el proyecto EnergiAI como parte del hackathon.
 
-Este servicio será responsable de:
+Este microservicio es el **cerebro inteligente** de la aplicación: recibe datos del hogar, ejecuta predicciones de consumo energético y genera recomendaciones personalizadas para optimizar el uso de electricidad.
 
-- Validar solicitudes.
-- Ejecutar la predicción del modelo de Machine Learning.
-- Aplicar reglas de negocio.
-- Calcular métricas de impacto.
-- Generar recomendaciones.
-- Exponer un endpoint REST para el Backend desarrollado en Spring Boot.
+---
 
-## Arquitectura
+## 🎯 Funcionalidades principales
 
-El microservicio sigue una arquitectura por capas:
+- ✅ Validación de datos de entrada
+- 🧠 Predicción de categorías de consumo energético
+- 📊 Cálculo de métricas de impacto (IEE, costos, ahorros)
+- 💡 Generación de recomendaciones personalizadas
+- 🔌 Endpoint REST listo para integrarse con el Backend Spring Boot
 
-- **routers/**: define los endpoints HTTP.
-- **services/**: contiene la lógica de predicción y reglas de negocio.
-- **schemas/**: modelos de entrada y salida con Pydantic.
-- **core/**: configuración y componentes transversales.
-- **utils/**: funciones auxiliares reutilizables.
-- **tests/**: pruebas del microservicio.
+---
 
-## Ejecución
+## 🏗️ Arquitectura del Microservicio
 
-Instalar dependencias:
+El proyecto sigue una arquitectura limpia y modular:
+
+| Carpeta | Propósito |
+|---------|-----------|
+| `routers/` | Definición de los endpoints HTTP |
+| `services/` | Lógica de negocio y predicción |
+| `schemas/` | Modelos de datos con Pydantic |
+| `core/` | Configuración y componentes transversales |
+| `utils/` | Funciones auxiliares reutilizables |
+| `tests/` | Pruebas unitarias y de integración |
+
+---
+
+## 🚀 ¿Cómo levantar la API?
+
+### 1. Clonar el repositorio y ubicarse en la carpeta correcta
 
 ```bash
-pip install -r requirements.txt
+ cd analisis_datos/api
+```
 
-## Contrato de datos
+### 2. Crear el entorno virtual
 
-El microservicio define sus contratos mediante modelos Pydantic.
+```bash
+ python -m venv .venv
+```
 
-### Entrada
+### 3. Activar el entorno virtual
+**En Git Bash:**
+```bash
+ source .venv/Scripts/activate
+```
 
-- consumo_kwh
-- cantidad_personas
-- cantidad_equipos
-- temperatura_exterior
-- uso_horario_pico
+**En Windows:**
+```bash
+ .venv/Scripts/activate
+```
 
-### Salida
+### 4. Crear el archivo .env desde .envexample
+```text
+ cp .envexample .env
+```
 
-- categoria
-- iee
-- probabilidad
-- costo_estimado_mensual
-- ahorro_potencial_mensual
-- ahorro_potencial_anual
-- recomendaciones
+### 5. Instalar dependencias
+```bash
+ pip install -r requirements.txt
+```
 
-## Predictor
+## Ejecución y Documentación de la API
 
-Actualmente el microservicio utiliza un predictor simulado (`PredictionService`) que devuelve una respuesta fija para permitir el desarrollo e integración con el Backend mientras CD3 finaliza el modelo de Machine Learning.
+### Ejecutar el servidor
+```bash
+ uvicorn app.main:app --reload
+```
+La API estará disponible en: `http://localhost:8000`
 
-Cuando el archivo `modelo.pkl` esté disponible, únicamente se reemplazará la implementación interna del servicio, manteniendo el mismo contrato de entrada y salida.
+## Explorar la documentación interactiva
 
-## BusinessService
+Una vez levantado el servidor, puedes probar el endpoint desde:
 
-El `BusinessService` aplica las reglas de negocio definidas por CD4.
+- **Swagger UI:** `http://localhost:8000/docs`
 
-Actualmente implementa:
 
-- Cálculo del costo estimado mensual.
-- Cálculo del ahorro potencial mensual.
-- Cálculo del ahorro potencial anual.
-- Generación de recomendaciones.
-- Generación de una explicación del resultado.
+---
 
-Este servicio no modifica la salida del modelo de Machine Learning; únicamente la complementa con información de negocio.
+## 📦 Contrato de Datos
+### Entrada (lo que envías)
+```json
+{
+  "consumo_kwh": 350.5,
+  "cantidad_personas": 4,
+  "cantidad_equipos": 8,
+  "temperatura_exterior": 28.0,
+  "uso_horario_pico": true
+}
+```
+### Salida (lo que recibes)
+```json
+{
+  "categoria": "Moderado-Eficiente o Ineficiente",
+  "iee": 85.3,
+  "probabilidad": 0.92,
+  "costo_estimado_mensual": 4520.50,
+  "ahorro_potencial_mensual": 1200.00,
+  "ahorro_potencial_anual": 14400.00,
+  "recomendaciones": ["Usar electrodomésticos eficientes", "Aprovechar luz natural"]
+}
+```
+---
 
-## Endpoint principal
+## 🤖 Estado del Predictor
+Actualmente, el servicio utiliza un predictor simulado (`PredictionService`)
+que devuelve respuestas fijas. Esto permite:
 
-### POST /analisis-energetico
+- ✅ **Desarrollo paralelo** con el Backend Spring Boot
+- ✅ **Pruebas de integración** tempranas
+- ✅ **Validación del flujo completo** de la API
+**Futuro:** Cuando se entregue el modelo final (`modelo.pkl`), solo se
+reemplazará la implementación interna del `PredictionService`. El contrato de
+entrada/salida NO cambiará, garantizando cero impacto en el Backend.
 
-Recibe la información del hogar, ejecuta la predicción del modelo de Machine Learning y aplica las reglas de negocio para devolver un análisis energético completo.
+---
 
-Actualmente utiliza un predictor simulado. Cuando el modelo entrenado (`modelo.pkl`) esté disponible, solo se reemplazará la implementación interna del `PredictionService`, manteniendo el mismo contrato de entrada y salida.
+## 📐 Business Service - Reglas de Negocio
+El `BusinessService` complementa la predicción del modelo agregando lógica
+de negocio:
+| Métrica | Descripción |
+|---------|-------------|
+| **Costo estimado mensual** | Calculado según el consumo y la tarifa
+vigente |
+| **Ahorro potencial mensual** | Basado en las recomendaciones aplicadas |
+| **Ahorro potencial anual** | Proyección a 12 meses |
+| **Recomendaciones** | Lista de acciones personalizadas |
+⚠️ *Este servicio no modifica la salida del modelo, solo la enriquece.*
 
-## Manejo de excepciones
+---
 
-La API implementa un manejo global de excepciones para garantizar respuestas consistentes.
+## 🌐 Endpoint Principal
+### `POST /analisis-energetico`
+**Descripción:** Recibe datos del hogar, ejecuta la predicción y devuelve un
+análisis energético completo.
+**Ejemplo de uso (con cURL):**
 
-Actualmente contempla:
+```bash
+    curl -X 'POST' \
+    'http://127.0.0.1:8000/analisis-energetico' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "cantidad_equipos": 10,
+    "cantidad_personas": 4,
+    "consumo_kwh": 420,
+    "temperatura_exterior": 28,
+    "uso_horario_pico": true
+    }'
+```
 
-- Errores de validación (422).
-- Excepciones HTTP controladas.
-- Errores internos del servidor (500).
+---
 
-Todos los errores son registrados mediante el sistema de logging de la aplicación.
+## 🛡️ Manejo de Errores
+La API implementa un sistema robusto de manejo de excepciones:
+| Código | Descripción |
+|--------|-------------|
+| `422` | Error de validación (datos incorrectos o faltantes) |
+| `400` | Solicitud mal formada |
+| `500` | Error interno del servidor |
+Todos los errores son registrados automáticamente mediante el sistema de
+logging.
 
-## Logging
+---
 
-La aplicación implementa una configuración centralizada de logging mediante el módulo estándar `logging` de Python.
-
-Todos los componentes utilizan la misma configuración para registrar eventos relevantes, advertencias y errores, facilitando el monitoreo y la depuración del microservicio.
+## 📋 Logging
+La aplicación utiliza el módulo `logging` de Python con configuración
+centralizada. Esto permite:
+- 🔍 Monitoreo en tiempo real
+- 🐛 Depuración eficiente
+- 📊 Trazabilidad de eventos y errores
