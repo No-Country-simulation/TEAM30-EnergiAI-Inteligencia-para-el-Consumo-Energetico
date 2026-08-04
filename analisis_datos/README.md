@@ -106,18 +106,27 @@ graph TD
 *   **Análisis Exploratorio de Datos (EDA)**.
 *   Hallazgos y conclusiones sobre los patrones de consumo.
 
+### Selección y Justificación del Dataset (CD1)
+Al inicio del proyecto, durante la fase de exploración y comprensión de los datos, se recibieron dos conjuntos de datos distintos para su evaluación. 
+
+Tras un análisis preliminar, el equipo tomó la decisión estratégica de avanzar trabajando exclusivamente con el dataset enfocado en hogares inteligentes (**Smart Home**). 
+
+**Justificación de la decisión:**
+* **Alineación con el objetivo:** Este conjunto de datos refleja de manera más clara y directa el problema que busca resolver la API: la clasificación de eficiencia energética por hogar.
+* **Calidad de variables:** Contiene la estructura óptima (consumo por horas, cantidad de equipos, clima, etc.) para aplicar las transformaciones necesarias y alimentar de forma correcta tanto al modelo predictivo (CD3) como a las reglas de negocio (CD4).
+
 ### CD2 (Científico de Datos 2)
 *   **Transformación de datos:** Agrupación del dataset para que cada fila represente un único hogar usando el `Home ID`.
 *   **Cálculo de nuevas variables:** Suma del consumo total, conteo de cantidad de equipos, cálculo de temperatura promedio y evaluación porcentual del uso en horario pico.
 *   **Partición Train/Test:** Generación de la nueva división (80/20) asegurando que no existan hogares repetidos entre conjuntos.
 *   **Validaciones:** Verificación de tipos de datos, ausencia de nulos y consistencia de variables.
 
-### CD3 (Científico de Datos 3) 🔄 *[En espera de datos de CD2]*
-*(Esta sección se completará cuando CD3 entregue el modelo)*
-*   Construcción del Índice de Eficiencia Energética (IEE).
-*   Variables utilizadas para el entrenamiento.
-*   Algoritmos evaluados y modelo seleccionado.
-*   Métricas de desempeño.
+### CD3 (Científico de Datos 3) 🔄 *[En desarrollo]*
+*   **Construcción metodológica del IEE:** Selección de variables clave para el índice (`consumo_kwh`, `cantidad_equipos`, `temperatura_exterior`, `uso_horario_pico`).
+*   **Normalización y Ponderación:** Aplicación de técnicas de escalado (ej. Min-Max o StandardScaler) y asignación de pesos técnicos para cada variable.
+*   **Definición de categorías:** Cálculo del índice en una escala de 0 a 100 y creación de las etiquetas objetivo (Eficiente, Moderado, Ineficiente) basadas en la distribución real de los datos.
+*   **Entrenamiento y Evaluación:** Uso exclusivo de `smart_home_train.csv` para entrenar y `smart_home_test.csv` para evaluar y comparar distintos algoritmos de clasificación.
+*   **Generación de Entregables:** Creación del notebook de modelado (`modelado.ipynb`), archivo de métricas (`metricas_modelos.csv`), modelo exportado (`modelo.pkl`) y el reporte metodológico oficial (`reporte_cd3.pdf`).
 
 ### Despliegue e Integración de la API (CD4) ✅ *[Completado]*
 En esta etapa final, se desarrolló el microservicio encargado de exponer el modelo de Machine Learning y aplicar las reglas de negocio, estableciendo el contrato de integración oficial (Versión 2.0).
@@ -187,4 +196,3 @@ flowchart LR
 | Microservicio y Recomendaciones | CD4 | ✅ Finalizado |
 
 ---
-

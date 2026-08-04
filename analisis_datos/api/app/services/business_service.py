@@ -50,20 +50,13 @@ class BusinessService:
             prediction,
         )
 
-        explanation = self._build_explanation(
-            request,
-            prediction,
-        )
-
         return AnalysisResponse(
             categoria=prediction.categoria,
-            iee=prediction.iee,
             probabilidad=prediction.probabilidad,
             costo_estimado_mensual=monthly_cost,
             ahorro_potencial_mensual=monthly_savings,
             ahorro_potencial_anual=yearly_savings,
             recomendaciones=recommendations,
-            explicacion=explanation,
         )
 
     def _calculate_monthly_cost(self, consumo_kwh: float) -> float:
@@ -128,51 +121,96 @@ class BusinessService:
         prediction: PredictionResult,
     ) -> list[str]:
         """
-        Genera recomendaciones según las reglas de negocio.
+        Genera recomendaciones personalizadas a partir de las variables
+        de entrada y de la categoría predicha por el modelo.
+
+        Parameters
+        ----------
+        request : AnalysisRequest
+            Datos recibidos desde el Backend.
+
+        prediction : PredictionResult
+            Resultado generado por el modelo de Machine Learning.
+
+        Returns
+        -------
+        list[str]
+            Lista de recomendaciones para mejorar la eficiencia energética.
         """
 
         recommendations: list[str] = []
 
-        if request.uso_horario_pico:
+        # ---------------------------------------------------------
+        # Consumo energético mensual
+        # ---------------------------------------------------------
+        if request.consumo_kwh >= 400:
             recommendations.append(
-                "Reducir el consumo durante los horarios de mayor demanda."
+                "El consumo energético mensual es elevado. Se recomienda identificar y optimizar los equipos de mayor demanda."
+            )
+        elif request.consumo_kwh <= 200:
+            recommendations.append(
+                "El consumo energético del hogar se encuentra en un rango bajo. Mantenga las buenas prácticas de uso eficiente."
             )
 
-        if prediction.categoria == "Ineficiente":
+        # ---------------------------------------------------------
+        # Cantidad de personas
+        # ---------------------------------------------------------
+        if (
+            request.cantidad_personas <= 2
+            and request.consumo_kwh >= 350
+        ):
             recommendations.append(
-                "Revisar los equipos eléctricos de mayor consumo."
+                "Se observa un consumo elevado para un hogar con pocos ocupantes. Revise posibles consumos innecesarios."
             )
 
+        # ---------------------------------------------------------
+        # Cantidad de equipos eléctricos
+        # ---------------------------------------------------------
+        if request.cantidad_equipos >= 10:
+            recommendations.append(
+                "La vivienda dispone de varios equipos eléctricos. Desconecte aquellos que no estén en uso para reducir el consumo en espera."
+            )
+
+        # ---------------------------------------------------------
+        # Temperatura exterior
+        # ---------------------------------------------------------
         if request.temperatura_exterior >= 30:
             recommendations.append(
-                "Optimizar el uso de sistemas de climatización."
+                "La temperatura exterior es elevada. Optimice el uso de los sistemas de climatización para mejorar la eficiencia energética."
             )
 
+        # ---------------------------------------------------------
+        # Horario pico
+        # ---------------------------------------------------------
+        if request.uso_horario_pico:
+            recommendations.append(
+                "Evite concentrar el uso de equipos eléctricos durante los horarios de mayor demanda energética."
+            )
+
+        # ---------------------------------------------------------
+        # Recomendación según la categoría predicha
+        # ---------------------------------------------------------
+        if prediction.categoria == "Ineficiente":
+            recommendations.append(
+                "Priorice acciones de ahorro energético para reducir el consumo y mejorar la eficiencia del hogar."
+            )
+
+        elif prediction.categoria == "Moderado":
+            recommendations.append(
+                "Existen oportunidades de mejora que pueden incrementar la eficiencia energética del hogar."
+            )
+
+        elif prediction.categoria == "Eficiente":
+            recommendations.append(
+                "El hogar presenta un buen nivel de eficiencia energética. Mantenga los hábitos actuales de consumo."
+            )
+
+        # ---------------------------------------------------------
+        # Recomendación por defecto
+        # ---------------------------------------------------------
         if not recommendations:
             recommendations.append(
-                "Mantener los hábitos actuales de consumo energético."
+                "No se identificaron acciones prioritarias. Continúe manteniendo hábitos responsables de consumo energético."
             )
 
         return recommendations
-
-    def _build_explanation(
-        self,
-        request: AnalysisRequest,
-        prediction: PredictionResult,
-    ) -> str:
-        """
-        Genera una explicación sencilla del resultado obtenido.
-        """
-
-        message = (
-            f"El hogar fue clasificado como "
-            f"{prediction.categoria.lower()} "
-            f"con un IEE de {prediction.iee}."
-        )
-
-        if request.uso_horario_pico:
-            message += (
-                " Se detectó consumo durante horarios de alta demanda."
-            )
-
-        return message

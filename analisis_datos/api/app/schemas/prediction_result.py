@@ -18,13 +18,6 @@ class PredictionResult(BaseModel):
         description="Clasificación energética obtenida por el modelo."
     )
 
-    iee: int = Field(
-        ...,
-        ge=0,
-        le=100,
-        description="Índice de Eficiencia Energética."
-    )
-
     probabilidad: float = Field(
         ...,
         ge=0,
@@ -36,7 +29,6 @@ class PredictionResult(BaseModel):
         json_schema_extra={
             "example": {
                 "categoria": "Moderado",
-                "iee": 67,
                 "probabilidad": 0.86
             }
         }
