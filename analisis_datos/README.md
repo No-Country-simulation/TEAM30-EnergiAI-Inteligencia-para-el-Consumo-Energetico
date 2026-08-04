@@ -155,6 +155,8 @@ El formato final de salida que recibe el cliente es el siguiente:
         "Optimizar el uso de electrodomésticos."
     ]
 }
+```
+
 
 ---
 
