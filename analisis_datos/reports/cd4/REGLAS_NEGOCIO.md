@@ -53,7 +53,6 @@ Reglas de negocio
         ├── Ahorro mensual
         ├── Ahorro anual
         ├── Recomendaciones
-        └── Explicación
 
         │
 

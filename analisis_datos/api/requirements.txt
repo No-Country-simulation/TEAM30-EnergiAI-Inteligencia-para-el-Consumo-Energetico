@@ -6,3 +6,4 @@ langchain-cohere
 cohere
 joblib
 pandas
+scikit-learn

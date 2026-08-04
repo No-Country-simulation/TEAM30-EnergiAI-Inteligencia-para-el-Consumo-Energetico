@@ -152,7 +152,6 @@ HTTP 422
         "Revisar los equipos con mayor consumo energético.",
         "Optimizar el uso de electrodomésticos."
     ],
-    "explicacion": "El hogar presenta un nivel de eficiencia energética moderado. Se recomienda optimizar el consumo energético para reducir el costo mensual."
 }
 ```
 
@@ -168,7 +167,6 @@ HTTP 422
 | ahorro_potencial_mensual | float | Estimación del ahorro mensual |
 | ahorro_potencial_anual | float | Estimación del ahorro anual |
 | recomendaciones | array[string] | Recomendaciones generadas mediante reglas de negocio |
-| explicacion | string | Explicación del resultado obtenido |
 
 ---
 
