@@ -119,11 +119,33 @@ graph TD
 *   Algoritmos evaluados y modelo seleccionado.
 *   Métricas de desempeño.
 
-### CD4 (Científico de Datos 4) ⏳ *[Pendiente]*
-*(Esta sección se completará cuando CD4 finalice la integración)*
-*   Desarrollo del microservicio IA y API.
-*   Motor de recomendaciones.
-*   Explicación de resultados del modelo.
+### Despliegue e Integración de la API (CD4) ✅ *[Completado]*
+En esta etapa final, se desarrolló el microservicio encargado de exponer el modelo de Machine Learning y aplicar las reglas de negocio, estableciendo el contrato de integración oficial (Versión 2.0).
+
+* **Tecnología:** Microservicio desarrollado en FastAPI.
+* **Comunicación:** Integración mediante el endpoint `POST /analisis-energetico` para ser consumido por el Backend en Java Spring Boot.
+* **Reglas de Negocio:** El microservicio procesa la predicción del modelo y aplica lógica adicional para calcular el costo estimado mensual, el ahorro potencial (mensual y anual), y devolver una lista de recomendaciones accionables.
+
+#### Decisiones Arquitectónicas Clave
+1. **Desacople de Inferencia (Eliminación del IEE):** Se eliminó el campo IEE de la respuesta de la API, ya que el modelo en producción (`predict()` y `predict_proba()`) solo genera la categoría y su nivel de confianza. Esto permite actualizar el modelo a futuro sin romper el contrato con el Backend.
+2. **Alta Disponibilidad (Estabilidad vs. LLM):** Se decidió retirar la integración en tiempo real con modelos LLM para la generación de "explicaciones" dinámicas. En su lugar, el sistema prioriza la fiabilidad devolviendo un arreglo de "recomendaciones" estáticas predefinidas, eliminando así los puntos de falla por latencia o caída de servicios de terceros.
+
+#### Contrato de Respuesta Exitosa (JSON)
+El formato final de salida que recibe el cliente es el siguiente:
+
+```json
+{
+    "categoria": "Moderado",
+    "probabilidad": 0.99,
+    "costo_estimado_mensual": 315.00,
+    "ahorro_potencial_mensual": 31.50,
+    "ahorro_potencial_anual": 378.00,
+    "recomendaciones": [
+        "Reducir el consumo durante los horarios pico.",
+        "Revisar los equipos con mayor consumo energético.",
+        "Optimizar el uso de electrodomésticos."
+    ]
+}
 
 ---
 
@@ -152,6 +174,7 @@ flowchart LR
     E --> F[Backend Spring Boot]
 ```
 
+
 ---
 
 ## 11. Estado del proyecto
@@ -159,23 +182,9 @@ flowchart LR
 | Etapa | Responsable | Estado |
 | :--- | :--- | :--- |
 | Análisis Exploratorio (EDA) | CD1 | ✅ Finalizado |
-| Agrupación por Hogar y Variables | CD2 | 🔄 En desarrollo (Ajuste) |
-| Construcción IEE y Modelado | CD3 | ⏳ Pendiente de CD2 |
-| Microservicio y Recomendaciones | CD4 | ⏳ Pendiente |
+| Agrupación por Hogar y Variables | CD2 | ✅ Finalizado |
+| Construcción IEE y Modelado | CD3 | ✅ Finalizado |
+| Microservicio y Recomendaciones | CD4 | ✅ Finalizado |
 
 ---
 
-## 12. Próximas etapas
-
-Esta sección queda estructurada y preparada para incorporar los resultados a medida que avancen las siguientes fases del proyecto. No se inventará información; se actualizará cuando CD3 y CD4 liberen sus entregables.
-
-### Resultados del Modelo (CD3)
-*   **Construcción del IEE:** Fórmula y variables finales utilizadas.
-*   **Resultados del modelo:** Algoritmo seleccionado.
-*   **Métricas:** Accuracy, Precision, Recall y F1-Score.
-*   **Matriz de confusión:** Evaluación sobre el conjunto de pruebas.
-*   **Importancia de variables:** Gráfico de *Feature Importance*.
-
-### Integración y Lógica de Negocio (CD4)
-*   **Integración con FastAPI:** Explicación de los endpoints del microservicio.
-*   **Recomendaciones generadas por el sistema:** Catálogo de acciones sugeridas según la clasificación de eficiencia del hogar.
