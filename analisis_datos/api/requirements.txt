@@ -4,3 +4,5 @@ pydantic-settings
 langchain
 langchain-cohere
 cohere
+joblib
+pandas
