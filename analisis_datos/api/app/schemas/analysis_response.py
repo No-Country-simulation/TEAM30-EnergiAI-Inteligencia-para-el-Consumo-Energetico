@@ -17,11 +17,6 @@ class AnalysisResponse(BaseModel):
         description="Clasificación energética obtenida por el modelo."
     )
 
-    iee: int = Field(
-        ...,
-        description="Índice de Eficiencia Energética."
-    )
-
     probabilidad: float = Field(
         ...,
         ge=0,
@@ -53,7 +48,6 @@ class AnalysisResponse(BaseModel):
         json_schema_extra={
             "example": {
                 "categoria": "Moderado",
-                "iee": 67,
                 "probabilidad": 0.86,
                 "costo_estimado_mensual": 315.0,
                 "ahorro_potencial_mensual": 31.5,

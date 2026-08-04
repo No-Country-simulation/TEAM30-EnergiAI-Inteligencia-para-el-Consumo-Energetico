@@ -87,10 +87,10 @@ Una vez levantado el servidor, puedes probar el endpoint desde:
 ### Entrada (lo que envías)
 ```json
 {
-  "consumo_kwh": 350.5,
+  "consumo_kwh": 350,
   "cantidad_personas": 4,
   "cantidad_equipos": 8,
-  "temperatura_exterior": 28.0,
+  "temperatura_exterior": 28,
   "uso_horario_pico": true
 }
 ```

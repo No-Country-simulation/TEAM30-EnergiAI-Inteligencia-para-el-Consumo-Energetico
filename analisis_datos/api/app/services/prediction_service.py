@@ -47,6 +47,5 @@ class PredictionService:
 
         return PredictionResult(
             categoria="Moderado",
-            iee=67,
             probabilidad=0.86,
         )

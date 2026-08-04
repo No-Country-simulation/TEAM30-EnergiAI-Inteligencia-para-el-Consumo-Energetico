@@ -50,20 +50,13 @@ class BusinessService:
             prediction,
         )
 
-        explanation = self._build_explanation(
-            request,
-            prediction,
-        )
-
         return AnalysisResponse(
             categoria=prediction.categoria,
-            iee=prediction.iee,
             probabilidad=prediction.probabilidad,
             costo_estimado_mensual=monthly_cost,
             ahorro_potencial_mensual=monthly_savings,
             ahorro_potencial_anual=yearly_savings,
             recomendaciones=recommendations,
-            explicacion=explanation,
         )
 
     def _calculate_monthly_cost(self, consumo_kwh: float) -> float:
@@ -154,25 +147,3 @@ class BusinessService:
             )
 
         return recommendations
-
-    def _build_explanation(
-        self,
-        request: AnalysisRequest,
-        prediction: PredictionResult,
-    ) -> str:
-        """
-        Genera una explicación sencilla del resultado obtenido.
-        """
-
-        message = (
-            f"El hogar fue clasificado como "
-            f"{prediction.categoria.lower()} "
-            f"con un IEE de {prediction.iee}."
-        )
-
-        if request.uso_horario_pico:
-            message += (
-                " Se detectó consumo durante horarios de alta demanda."
-            )
-
-        return message
