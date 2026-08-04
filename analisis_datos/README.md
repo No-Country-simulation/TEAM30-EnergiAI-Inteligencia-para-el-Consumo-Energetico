@@ -112,12 +112,40 @@ graph TD
 *   **Partición Train/Test:** Generación de la nueva división (80/20) asegurando que no existan hogares repetidos entre conjuntos.
 *   **Validaciones:** Verificación de tipos de datos, ausencia de nulos y consistencia de variables.
 
-### CD3 (Científico de Datos 3) 🔄 *[En desarrollo]*
-*   **Construcción metodológica del IEE:** Selección de variables clave para el índice (`consumo_kwh`, `cantidad_equipos`, `temperatura_exterior`, `uso_horario_pico`).
-*   **Normalización y Ponderación:** Aplicación de técnicas de escalado (ej. Min-Max o StandardScaler) y asignación de pesos técnicos para cada variable.
-*   **Definición de categorías:** Cálculo del índice en una escala de 0 a 100 y creación de las etiquetas objetivo (Eficiente, Moderado, Ineficiente) basadas en la distribución real de los datos.
-*   **Entrenamiento y Evaluación:** Uso exclusivo de `smart_home_train.csv` para entrenar y `smart_home_test.csv` para evaluar y comparar distintos algoritmos de clasificación.
-*   **Generación de Entregables:** Creación del notebook de modelado (`modelado.ipynb`), archivo de métricas (`metricas_modelos.csv`), modelo exportado (`modelo.pkl`) y el reporte metodológico oficial (`reporte_cd3.pdf`).
+### Modelado Predictivo (CD3) ✅ *[Completado]*
+
+En esta etapa se desarrolló, entrenó y evaluó el modelo de Machine Learning encargado de clasificar la eficiencia energética de los hogares. 
+
+* **Variable objetivo:** Se diseñó un **Índice de Eficiencia Energética (IEE)** (escala 0-100) a partir del consumo absoluto y el consumo por habitante, generando tres categorías: **Eficiente**, **Moderado** e **Ineficiente**.
+* **Proceso de entrenamiento:** La experimentación con distintos algoritmos quedó documentada en `modelado_v1.ipynb`.
+* **Evaluación de Modelos:** Se probaron tres arquitecturas sobre el conjunto de prueba (`test`):
+
+| Modelo | Accuracy | F1-Score (Weighted) |
+| :--- | :---: | :---: |
+| Decision Tree | 0.96 | 0.96 |
+| Random Forest | 0.98 | 0.98 |
+| **Gradient Boosting** | **0.99** | **0.99** |
+
+*(El modelo de Gradient Boosting clasificó correctamente el 100% de los hogares "Moderados" e "Ineficientes").*
+
+* **Algoritmo seleccionado:** **Gradient Boosting** por su superioridad general y alta fiabilidad.
+* **Exportación:** Serializado como `modelo_iee_gradient_boosting.pkl`, listo para integración con la API (CD4).
+
+### Interpretabilidad del Modelo (Feature Importance)
+Se analizó la importancia de variables del modelo ganador, revelando un patrón claro:
+* **Consumo (kWh):** ~55% de impacto.
+* **Cantidad de Personas:** ~45% de impacto.
+
+![Gráfico de Importancia de Variables](./reports/cd3/importancia_de_las_variables.png)
+
+El modelo determinó que `temperatura_exterior`, `cantidad_equipos` y `uso_horario_pico` tienen un peso estadístico casi nulo con los datos actuales. **Se recomienda conservar estas variables en la API** para futuras iteraciones, ya que podrían ganar relevancia con más datos.
+
+---
+
+**Rendimiento visual del modelo seleccionado:**
+
+![Matriz de Confusión - Gradient Boosting](./reports/cd3/gradient_boosting.png)
+
 
 ### CD4 (Científico de Datos 4) ⏳ *[Pendiente]*
 *(Esta sección se completará cuando CD4 finalice la integración)*
