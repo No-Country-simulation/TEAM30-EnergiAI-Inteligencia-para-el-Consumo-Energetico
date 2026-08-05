@@ -115,6 +115,15 @@ Tras un análisis preliminar, el equipo tomó la decisión estratégica de avanz
 * **Alineación con el objetivo:** Este conjunto de datos refleja de manera más clara y directa el problema que busca resolver la API: la clasificación de eficiencia energética por hogar.
 * **Calidad de variables:** Contiene la estructura óptima (consumo por horas, cantidad de equipos, clima, etc.) para aplicar las transformaciones necesarias y alimentar de forma correcta tanto al modelo predictivo (CD3) como a las reglas de negocio (CD4).
 
+### Selección y Justificación del Dataset (CD1)
+Al inicio del proyecto, durante la fase de exploración y comprensión de los datos, se recibieron dos conjuntos de datos distintos para su evaluación. 
+
+Tras un análisis preliminar, el equipo tomó la decisión estratégica de avanzar trabajando exclusivamente con el dataset enfocado en hogares inteligentes (**Smart Home**). 
+
+**Justificación de la decisión:**
+* **Alineación con el objetivo:** Este conjunto de datos refleja de manera más clara y directa el problema que busca resolver la API: la clasificación de eficiencia energética por hogar.
+* **Calidad de variables:** Contiene la estructura óptima (consumo por horas, cantidad de equipos, clima, etc.) para aplicar las transformaciones necesarias y alimentar de forma correcta tanto al modelo predictivo (CD3) como a las reglas de negocio (CD4).
+
 ### CD2 (Científico de Datos 2)
 *   **Transformación de datos:** Agrupación del dataset para que cada fila represente un único hogar usando el `Home ID`.
 *   **Cálculo de nuevas variables:** Suma del consumo total, conteo de cantidad de equipos, cálculo de temperatura promedio y evaluación porcentual del uso en horario pico.
@@ -128,11 +137,35 @@ Tras un análisis preliminar, el equipo tomó la decisión estratégica de avanz
 *   **Entrenamiento y Evaluación:** Uso exclusivo de `smart_home_train.csv` para entrenar y `smart_home_test.csv` para evaluar y comparar distintos algoritmos de clasificación.
 *   **Generación de Entregables:** Creación del notebook de modelado (`modelado.ipynb`), archivo de métricas (`metricas_modelos.csv`), modelo exportado (`modelo.pkl`) y el reporte metodológico oficial (`reporte_cd3.pdf`).
 
-### CD4 (Científico de Datos 4) ⏳ *[Pendiente]*
-*(Esta sección se completará cuando CD4 finalice la integración)*
-*   Desarrollo del microservicio IA y API.
-*   Motor de recomendaciones.
-*   Explicación de resultados del modelo.
+### Despliegue e Integración de la API (CD4) ✅ *[Completado]*
+En esta etapa final, se desarrolló el microservicio encargado de exponer el modelo de Machine Learning y aplicar las reglas de negocio, estableciendo el contrato de integración oficial (Versión 2.0).
+
+* **Tecnología:** Microservicio desarrollado en FastAPI.
+* **Comunicación:** Integración mediante el endpoint `POST /analisis-energetico` para ser consumido por el Backend en Java Spring Boot.
+* **Reglas de Negocio:** El microservicio procesa la predicción del modelo y aplica lógica adicional para calcular el costo estimado mensual, el ahorro potencial (mensual y anual), y devolver una lista de recomendaciones accionables.
+
+#### Decisiones Arquitectónicas Clave
+1. **Desacople de Inferencia (Eliminación del IEE):** Se eliminó el campo IEE de la respuesta de la API, ya que el modelo en producción (`predict()` y `predict_proba()`) solo genera la categoría y su nivel de confianza. Esto permite actualizar el modelo a futuro sin romper el contrato con el Backend.
+2. **Alta Disponibilidad (Estabilidad vs. LLM):** Se decidió retirar la integración en tiempo real con modelos LLM para la generación de "explicaciones" dinámicas. En su lugar, el sistema prioriza la fiabilidad devolviendo un arreglo de "recomendaciones" estáticas predefinidas, eliminando así los puntos de falla por latencia o caída de servicios de terceros.
+
+#### Contrato de Respuesta Exitosa (JSON)
+El formato final de salida que recibe el cliente es el siguiente:
+
+```json
+{
+    "categoria": "Moderado",
+    "probabilidad": 0.99,
+    "costo_estimado_mensual": 315.00,
+    "ahorro_potencial_mensual": 31.50,
+    "ahorro_potencial_anual": 378.00,
+    "recomendaciones": [
+        "Reducir el consumo durante los horarios pico.",
+        "Revisar los equipos con mayor consumo energético.",
+        "Optimizar el uso de electrodomésticos."
+    ]
+}
+```
+
 
 ---
 
@@ -161,6 +194,7 @@ flowchart LR
     E --> F[Backend Spring Boot]
 ```
 
+
 ---
 
 ## 11. Estado del proyecto
@@ -169,22 +203,7 @@ flowchart LR
 | :--- | :--- | :--- |
 | Análisis Exploratorio (EDA) | CD1 | ✅ Finalizado |
 | Agrupación por Hogar y Variables | CD2 | ✅ Finalizado |
-| Construcción IEE y Modelado | CD3 | 🔄 En desarrollo |
-| Microservicio y Recomendaciones | CD4 | ⏳ Pendiente |
+| Construcción IEE y Modelado | CD3 | ✅ Finalizado |
+| Microservicio y Recomendaciones | CD4 | ✅ Finalizado |
 
 ---
-
-## 12. Próximas etapas
-
-Esta sección queda estructurada y preparada para incorporar los resultados a medida que avancen las siguientes fases del proyecto. No se inventará información; se actualizará cuando CD3 y CD4 liberen sus entregables.
-
-### Resultados del Modelo (CD3)
-*   **Documentación del IEE (`reporte_cd3.pdf`):** Metodología completa detallando la normalización, justificación de los pesos asignados y la fórmula final del índice.
-*   **Criterios de Clasificación:** Justificación estadística de los rangos utilizados para definir si un hogar es Eficiente, Moderado o Ineficiente.
-*   **Selección del Modelo:** Comparación de algoritmos evaluados, selección del mejor modelo y reporte de sus métricas de desempeño.
-*   **Importancia de variables:** Gráfico y análisis de *Feature Importance*.
-*   **Recomendaciones para CD4:** Sugerencias y consideraciones técnicas para la posterior integración con el microservicio.
-
-### Integración y Lógica de Negocio (CD4)
-*   **Integración con FastAPI:** Explicación de los endpoints del microservicio.
-*   **Recomendaciones generadas por el sistema:** Catálogo de acciones sugeridas según la clasificación de eficiencia del hogar.
