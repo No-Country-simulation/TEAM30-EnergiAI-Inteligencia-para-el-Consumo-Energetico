@@ -184,16 +184,16 @@ La API cuenta con documentación automática generada por FastAPI:
 ## 🖼️ Vistas previas
 
 ### Swagger UI
-![Swagger UI](./api/assets/image_1.png)
-![Swagger UI](./api/assets/image_2.png)
-![Swagger UI](./api/assets/image_3.png)
-![Swagger UI](./api/assets/image_4.png)
+![Swagger UI](./assets/image_1.png)
+![Swagger UI](./assets/image_2.png)
+![Swagger UI](./assets/image_3.png)
+![Swagger UI](./assets/imagen_4.png)
 
 *Interfaz interactiva para probar los endpoints directamente desde el navegador.*
 
 ### Insomnia
-![Insomnia](./api/assets/image_6.png)
-![Insomnia](./api/assets/image_7.png)
+![Insomnia](./assets/imagen_6.png)
+![Insomnia](./assets/imagen_7.png)
 
 *Colección de requests configurada para pruebas en Insomnia.*
 
