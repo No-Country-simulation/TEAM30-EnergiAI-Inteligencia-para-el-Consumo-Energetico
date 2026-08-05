@@ -106,6 +106,15 @@ graph TD
 *   **Análisis Exploratorio de Datos (EDA)**.
 *   Hallazgos y conclusiones sobre los patrones de consumo.
 
+### Selección y Justificación del Dataset (CD1)
+Al inicio del proyecto, durante la fase de exploración y comprensión de los datos, se recibieron dos conjuntos de datos distintos para su evaluación. 
+
+Tras un análisis preliminar, el equipo tomó la decisión estratégica de avanzar trabajando exclusivamente con el dataset enfocado en hogares inteligentes (**Smart Home**). 
+
+**Justificación de la decisión:**
+* **Alineación con el objetivo:** Este conjunto de datos refleja de manera más clara y directa el problema que busca resolver la API: la clasificación de eficiencia energética por hogar.
+* **Calidad de variables:** Contiene la estructura óptima (consumo por horas, cantidad de equipos, clima, etc.) para aplicar las transformaciones necesarias y alimentar de forma correcta tanto al modelo predictivo (CD3) como a las reglas de negocio (CD4).
+
 ### CD2 (Científico de Datos 2)
 *   **Transformación de datos:** Agrupación del dataset para que cada fila represente un único hogar usando el `Home ID`.
 *   **Cálculo de nuevas variables:** Suma del consumo total, conteo de cantidad de equipos, cálculo de temperatura promedio y evaluación porcentual del uso en horario pico.
