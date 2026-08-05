@@ -138,7 +138,6 @@ Después de obtener la predicción del modelo, el microservicio ejecuta las sigu
 - Cálculo del ahorro potencial mensual.
 - Cálculo del ahorro potencial anual.
 - Generación de recomendaciones.
-- Generación de una explicación del resultado.
 
 Estas reglas permanecen completamente desacopladas del modelo de Machine Learning.
 
@@ -203,26 +202,49 @@ La arquitectura implementada facilita futuras actualizaciones del modelo sin mod
 
 ---
 
-# 12. Trabajo futuro
+# 12. Limitaciones identificadas
+
+Durante las pruebas funcionales del microservicio se realizaron diferentes escenarios de validación utilizando tanto datos representativos del conjunto de entrenamiento como casos extremos.
+
+Como resultado de estas pruebas se identificó que el modelo de Machine Learning mantiene un comportamiento adecuado cuando las características de entrada son similares a las utilizadas durante su proceso de entrenamiento. Sin embargo, al evaluar escenarios con valores significativamente diferentes al dominio original de los datos (por ejemplo, una cantidad inusualmente alta de personas por vivienda), el modelo continúa generando una predicción con un alto nivel de confianza.
+
+Este comportamiento corresponde a una limitación propia del modelo de Machine Learning y del conjunto de datos utilizado durante su entrenamiento, y no a una falla del microservicio desarrollado.
+
+En este contexto, el microservicio implementado por CD4 mantiene una clara separación de responsabilidades:
+
+- Consumir el modelo entrenado.
+- Ejecutar la inferencia.
+- Aplicar las reglas de negocio.
+- Generar la respuesta estructurada para el Backend.
+
+Por razones de arquitectura y mantenibilidad, el microservicio **no modifica, ajusta ni corrige** las predicciones generadas por el modelo.
+
+Las recomendaciones generadas por las reglas de negocio utilizan todas las variables recibidas por la API para enriquecer la respuesta entregada al usuario. No obstante, estas reglas tienen como objetivo proporcionar contexto y acciones de mejora, sin alterar el resultado de la inferencia producida por el modelo.
+
+Como mejora para futuras versiones del proyecto, se recomienda incorporar un mecanismo de validación del dominio de entrada (Input Data Validation) o de detección de datos fuera del dominio de entrenamiento (Out-of-Distribution Detection), con el fin de advertir al Backend cuando se reciban solicitudes cuyos valores se encuentren fuera del rango observado durante el entrenamiento del modelo.
+
+---
+
+# 13. Trabajo futuro
 
 Las siguientes mejoras podrán incorporarse en futuras versiones del proyecto:
 
-- Versionado del modelo.
-- Registro de inferencias.
+- Versionado del modelo de Machine Learning.
+- Registro y monitoreo de inferencias.
+- Validación de datos fuera del dominio de entrenamiento (Out-of-Distribution Detection).
 - Explainable AI (XAI).
-- Monitoreo del modelo.
 - Contenerización mediante Docker.
 - Despliegue en Oracle Cloud Infrastructure (OCI).
 - Integración continua y despliegue continuo (CI/CD).
 
 ---
 
-# 13. Conclusiones
+# 14. Conclusiones
 
 El microservicio desarrollado cumple con los objetivos definidos para el rol de CD4.
 
 La arquitectura implementada permite desacoplar el entrenamiento del proceso de inferencia, facilita la integración con el Backend y proporciona una base sólida para la evolución futura del sistema.
 
-La documentación generada asegura una comunicación clara entre los equipos de Ciencia de Datos y Backend, favoreciendo la mantenibilidad y escalabilidad de la solución.
+La implementación de reglas de negocio independientes del modelo permite enriquecer la respuesta entregada al usuario sin comprometer la integridad de la predicción generada por el modelo de Machine Learning. Asimismo, las limitaciones identificadas durante las pruebas fueron documentadas y consideradas dentro de la propuesta de evolución del sistema, garantizando una solución preparada para futuras mejoras.
 
----
+La documentación generada asegura una comunicación clara entre los equipos de Ciencia de Datos y Backend, favoreciendo la mantenibilidad, escalabilidad y evolución de la solución.

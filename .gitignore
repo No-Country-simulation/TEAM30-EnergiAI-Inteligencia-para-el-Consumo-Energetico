@@ -15,3 +15,4 @@ venv/
 # Sistema operativo
 .DS_Store
 Thumbs.dbanalisis_datos/api/.env
+analisis_datos/api/.env

@@ -1,177 +1,326 @@
 # ⚡ EnergiAI API - Microservicio de Inferencia
 
-> Microservicio desarrollado por el **TEAM30** para el proyecto EnergiAI como parte del hackathon.
+> Microservicio desarrollado por el **TEAM30** para el proyecto **EnergiAI – Inteligencia para el Consumo Energético**, como parte del Hackathon ONE G9 – Alura + Oracle.
 
-Este microservicio es el **cerebro inteligente** de la aplicación: recibe datos del hogar, ejecuta predicciones de consumo energético y genera recomendaciones personalizadas para optimizar el uso de electricidad.
-
----
-
-## 🎯 Funcionalidades principales
-
-- ✅ Validación de datos de entrada
-- 🧠 Predicción de categorías de consumo energético
-- 📊 Cálculo de métricas de impacto (IEE, costos, ahorros)
-- 💡 Generación de recomendaciones personalizadas
-- 🔌 Endpoint REST listo para integrarse con el Backend Spring Boot
+Este microservicio recibe información sobre el consumo energético de una vivienda, ejecuta un modelo de Machine Learning entrenado y aplica reglas de negocio para generar un análisis energético que posteriormente es consumido por el Backend desarrollado en Spring Boot.
 
 ---
 
-## 🏗️ Arquitectura del Microservicio
+# 🎯 Funcionalidades
 
-El proyecto sigue una arquitectura limpia y modular:
-
-| Carpeta | Propósito |
-|---------|-----------|
-| `routers/` | Definición de los endpoints HTTP |
-| `services/` | Lógica de negocio y predicción |
-| `schemas/` | Modelos de datos con Pydantic |
-| `core/` | Configuración y componentes transversales |
-| `utils/` | Funciones auxiliares reutilizables |
-| `tests/` | Pruebas unitarias y de integración |
+- ✅ Validación de datos de entrada mediante Pydantic.
+- 🤖 Inferencia utilizando un modelo de Machine Learning (Gradient Boosting).
+- 📊 Cálculo del costo estimado mensual.
+- 💰 Cálculo del ahorro potencial mensual y anual.
+- 💡 Generación de recomendaciones mediante reglas de negocio.
+- 📝 Logging centralizado.
+- 🚀 API REST desarrollada con FastAPI.
+- 🔌 Integración con Backend desarrollado en Spring Boot.
 
 ---
 
-## 🚀 ¿Cómo levantar la API?
+# 🏗️ Arquitectura
 
-### 1. Clonar el repositorio y ubicarse en la carpeta correcta
+El proyecto fue desarrollado siguiendo una arquitectura por capas con separación de responsabilidades.
 
-```bash
- cd analisis_datos/api
-```
-
-### 2. Crear el entorno virtual
-
-```bash
- python -m venv .venv
-```
-
-### 3. Activar el entorno virtual
-**En Git Bash:**
-```bash
- source .venv/Scripts/activate
-```
-
-**En Windows:**
-```bash
- .venv/Scripts/activate
-```
-
-### 4. Crear el archivo .env desde .envexample
 ```text
- cp .envexample .env
+Cliente
+
+        │
+
+        ▼
+
+Spring Boot
+
+        │
+
+POST /analisis-energetico
+
+        ▼
+
+Router
+
+        │
+
+        ▼
+
+Prediction Service
+
+        │
+
+        ▼
+
+Business Service
+
+        │
+
+        ▼
+
+Respuesta JSON
 ```
-
-### 5. Instalar dependencias
-```bash
- pip install -r requirements.txt
-```
-
-## Ejecución y Documentación de la API
-
-### Ejecutar el servidor
-```bash
- uvicorn app.main:app --reload
-```
-La API estará disponible en: `http://localhost:8000`
-
-## Explorar la documentación interactiva
-
-Una vez levantado el servidor, puedes probar el endpoint desde:
-
-- **Swagger UI:** `http://localhost:8000/docs`
-
 
 ---
 
-## 📦 Contrato de Datos
-### Entrada (lo que envías)
+# 📂 Estructura del proyecto
+
+| Carpeta | Descripción |
+|----------|-------------|
+| `routers/` | Endpoints de la API |
+| `services/` | Servicios de predicción y reglas de negocio |
+| `schemas/` | Modelos Pydantic |
+| `core/` | Configuración de la aplicación |
+| `exceptions/` | Manejo centralizado de excepciones |
+| `utils/` | Utilidades compartidas |
+| `tests/` | Pruebas |
+
+---
+
+# 🚀 Instalación
+
+## 1. Clonar el repositorio
+
+```bash
+git clone <url-del-repositorio>
+```
+
+Ingresar al proyecto
+
+```bash
+cd analisis_datos/api
+```
+
+---
+
+## 2. Crear el entorno virtual
+
+```bash
+python -m venv .venv
+```
+
+---
+
+## 3. Activar el entorno virtual
+
+### Windows
+
+```bash
+.venv\Scripts\activate
+```
+
+### Git Bash
+
+```bash
+source .venv/Scripts/activate
+```
+
+---
+
+## 4. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 5. Crear el archivo `.env`
+
+Copiar:
+
+```text
+.envexample
+```
+
+como
+
+```text
+.env
+```
+
+y completar las variables necesarias.
+
+Ejemplo:
+
+```text
+APP_NAME=EnergiAI API
+
+APP_VERSION=1.0.0
+
+ENERGY_PRICE=0.55
+
+EFFICIENT_SAVINGS=0.05
+
+MODERATE_SAVINGS=0.10
+
+INEFFICIENT_SAVINGS=0.20
+
+MODEL_PATH=models/modelo_iee_gradient_boosting.pkl
+
+LOG_LEVEL=INFO
+```
+
+---
+
+# ▶️ Ejecutar la API
+
+```bash
+uvicorn app.main:app --reload
+```
+
+La aplicación estará disponible en:
+
+```
+http://localhost:8000
+```
+
+---
+
+# 📚 Documentación interactiva
+
+Swagger:
+
+```
+http://localhost:8000/docs
+```
+
+---
+
+# 🌐 Endpoint principal
+
+## POST /analisis-energetico
+
+Recibe los datos del hogar, ejecuta el modelo de Machine Learning, aplica las reglas de negocio y devuelve un análisis energético.
+
+---
+
+# 📥 Entrada
+
 ```json
 {
-  "consumo_kwh": 350,
+  "consumo_kwh": 420,
   "cantidad_personas": 4,
-  "cantidad_equipos": 8,
+  "cantidad_equipos": 10,
   "temperatura_exterior": 28,
   "uso_horario_pico": true
 }
 ```
-### Salida (lo que recibes)
+
+---
+
+# 📤 Respuesta
+
 ```json
 {
-  "categoria": "Moderado-Eficiente o Ineficiente",
-  "iee": 85.3,
-  "probabilidad": 0.92,
-  "costo_estimado_mensual": 4520.50,
-  "ahorro_potencial_mensual": 1200.00,
-  "ahorro_potencial_anual": 14400.00,
-  "recomendaciones": ["Usar electrodomésticos eficientes", "Aprovechar luz natural"]
+  "categoria": "Moderado",
+  "probabilidad": 0.99,
+  "costo_estimado_mensual": 231.00,
+  "ahorro_potencial_mensual": 23.10,
+  "ahorro_potencial_anual": 277.20,
+  "recomendaciones": [
+    "Reducir el consumo durante los horarios de mayor demanda.",
+    "Optimizar el uso de los sistemas de climatización."
+  ]
 }
 ```
----
-
-## 🤖 Estado del Predictor
-Actualmente, el servicio utiliza un predictor simulado (`PredictionService`)
-que devuelve respuestas fijas. Esto permite:
-
-- ✅ **Desarrollo paralelo** con el Backend Spring Boot
-- ✅ **Pruebas de integración** tempranas
-- ✅ **Validación del flujo completo** de la API
-**Futuro:** Cuando se entregue el modelo final (`modelo.pkl`), solo se
-reemplazará la implementación interna del `PredictionService`. El contrato de
-entrada/salida NO cambiará, garantizando cero impacto en el Backend.
 
 ---
 
-## 📐 Business Service - Reglas de Negocio
-El `BusinessService` complementa la predicción del modelo agregando lógica
-de negocio:
-| Métrica | Descripción |
-|---------|-------------|
-| **Costo estimado mensual** | Calculado según el consumo y la tarifa
-vigente |
-| **Ahorro potencial mensual** | Basado en las recomendaciones aplicadas |
-| **Ahorro potencial anual** | Proyección a 12 meses |
-| **Recomendaciones** | Lista de acciones personalizadas |
-⚠️ *Este servicio no modifica la salida del modelo, solo la enriquece.*
+# 🤖 Modelo de Machine Learning
 
----
+La API consume un modelo previamente entrenado utilizando **Scikit-Learn** y cargado mediante **Joblib**.
 
-## 🌐 Endpoint Principal
-### `POST /analisis-energetico`
-**Descripción:** Recibe datos del hogar, ejecuta la predicción y devuelve un
-análisis energético completo.
-**Ejemplo de uso (con cURL):**
+Actualmente se integra el modelo:
 
-```bash
-    curl -X 'POST' \
-    'http://127.0.0.1:8000/analisis-energetico' \
-    -H 'accept: application/json' \
-    -H 'Content-Type: application/json' \
-    -d '{
-    "cantidad_equipos": 10,
-    "cantidad_personas": 4,
-    "consumo_kwh": 420,
-    "temperatura_exterior": 28,
-    "uso_horario_pico": true
-    }'
+```text
+modelo_iee_gradient_boosting.pkl
 ```
 
+La responsabilidad del microservicio consiste en:
+
+- cargar el modelo;
+- ejecutar la inferencia;
+- obtener la categoría y la probabilidad;
+- aplicar reglas de negocio;
+- devolver una respuesta estructurada al Backend.
+
+El microservicio **no modifica la predicción del modelo**, preservando la separación entre entrenamiento e inferencia.
+
 ---
 
-## 🛡️ Manejo de Errores
-La API implementa un sistema robusto de manejo de excepciones:
+# 📐 Reglas de negocio
+
+Después de la predicción se calculan automáticamente:
+
+- costo estimado mensual;
+- ahorro potencial mensual;
+- ahorro potencial anual;
+- recomendaciones basadas en las variables de entrada.
+
+Las reglas de negocio complementan la respuesta sin alterar el resultado del modelo.
+
+---
+
+# 🛡️ Validaciones
+
+La API valida automáticamente:
+
+- tipos de datos;
+- campos obligatorios;
+- formato de la solicitud.
+
+Las validaciones son realizadas mediante **Pydantic**.
+
+---
+
+# ⚠️ Manejo de errores
+
 | Código | Descripción |
-|--------|-------------|
-| `422` | Error de validación (datos incorrectos o faltantes) |
-| `400` | Solicitud mal formada |
-| `500` | Error interno del servidor |
-Todos los errores son registrados automáticamente mediante el sistema de
-logging.
+|---------|-------------|
+| 200 | Solicitud procesada correctamente |
+| 422 | Error de validación |
+| 500 | Error interno del servidor |
+
+Todos los errores son registrados mediante el sistema de logging.
 
 ---
 
-## 📋 Logging
-La aplicación utiliza el módulo `logging` de Python con configuración
-centralizada. Esto permite:
-- 🔍 Monitoreo en tiempo real
-- 🐛 Depuración eficiente
-- 📊 Trazabilidad de eventos y errores
+# 📋 Logging
+
+El proyecto utiliza un sistema de logging centralizado para registrar:
+
+- inicio de solicitudes;
+- carga del modelo;
+- ejecución de inferencias;
+- aplicación de reglas de negocio;
+- errores y excepciones.
+
+Esto facilita el monitoreo y la trazabilidad del microservicio.
+
+---
+
+# ☁️ Despliegue
+
+El proyecto incluye documentación para el despliegue en Oracle Cloud Infrastructure:
+
+- `DEPLOY_OCI.md`
+- `DEPLOY_OBJECT_STORAGE.md`
+
+Estas guías describen el proceso de instalación, configuración y ejecución permanente del microservicio utilizando Oracle Linux, Systemd, Nginx y Oracle Object Storage.
+
+---
+
+# 📄 Documentación del proyecto
+
+La carpeta `reports/cd4` contiene la documentación técnica del microservicio:
+
+- `API_CONTRACT.md`
+- `BUSINESS_RULES.md`
+- `REPORTE_CD4.md`
+- `DEPLOY_OCI.md`
+- `DEPLOY_OBJECT_STORAGE.md`
+
+---
+
+# 👥 Equipo
+
+Proyecto desarrollado por el **TEAM30** para el Hackathon ONE G9 – Alura + Oracle.
