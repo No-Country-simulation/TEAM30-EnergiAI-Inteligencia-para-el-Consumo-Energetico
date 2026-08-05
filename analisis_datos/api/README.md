@@ -142,21 +142,12 @@ y completar las variables necesarias.
 Ejemplo:
 
 ```text
-APP_NAME=EnergiAI API
-
-APP_VERSION=1.0.0
-
-ENERGY_PRICE=0.55
-
-EFFICIENT_SAVINGS=0.05
-
-MODERATE_SAVINGS=0.10
-
-INEFFICIENT_SAVINGS=0.20
-
-MODEL_PATH=models/modelo_iee_gradient_boosting.pkl
-
-LOG_LEVEL=INFO
+# ------------------------------------------------------------------
+# Modelo de Machine Learning
+# ------------------------------------------------------------------
+MODEL_SOURCE=local
+MODEL_PATH=../models/modelo_iee_gradient_boosting.pkl
+MODEL_BUCKET_URL=
 ```
 
 ---
