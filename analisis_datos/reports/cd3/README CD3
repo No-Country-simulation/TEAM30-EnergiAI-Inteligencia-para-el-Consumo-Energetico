@@ -1,0 +1,155 @@
+# 📊 Reporte Técnico – CD3
+
+## Modelado Predictivo para la Clasificación de la Eficiencia Energética de Hogares
+
+**Proyecto:** EnergiAI – Inteligencia para el Consumo Energético
+
+**Hackathon:** ONE G9 – Alura Latam & Oracle Next Education
+
+**Rol:** Científico de Datos 3 (CD3) – Modelado y Machine Learning
+
+**Integrante:** Juan Esteban Rodríguez Aranda
+
+**Fecha:** Agosto de 2026
+
+---
+
+# 1. Introducción
+
+El proyecto **EnergiAI – Inteligencia para el Consumo Energético** tiene como propósito desarrollar una solución basada en técnicas de ciencia de datos y aprendizaje automático que permita clasificar el nivel de eficiencia energética de un hogar a partir de un conjunto reducido de variables ingresadas por el usuario.
+
+Dentro de la arquitectura del proyecto, el Científico de Datos 3 (CD3) fue responsable del desarrollo del modelo de Machine Learning encargado de predecir la categoría de eficiencia energética del hogar utilizando los conjuntos de entrenamiento y prueba entregados por CD2.
+
+Como parte fundamental del proceso se diseñó un **Índice de Eficiencia Energética (IEE)** con una escala de **0 a 100**, utilizado para generar la variable objetivo del modelo de clasificación.
+
+Finalmente se entrenaron y compararon tres algoritmos de clasificación (**Decision Tree**, **Random Forest** y **Gradient Boosting**), seleccionando el modelo con mejor capacidad de generalización para su integración con la API del proyecto.
+
+---
+
+# 2. Metodología
+
+El desarrollo del modelo siguió una metodología reproducible compuesta por siete etapas.
+
+```text
+Datasets CD2
+      │
+      ▼
+Análisis Exploratorio
+      │
+      ▼
+Construcción del IEE
+      │
+      ▼
+Generación de Categorías
+      │
+      ▼
+Entrenamiento de Modelos
+      │
+      ▼
+Evaluación y Comparación
+      │
+      ▼
+Interpretabilidad
+      │
+      ▼
+Exportación del Modelo
+```
+
+Las principales actividades desarrolladas fueron:
+
+- Exploración del conjunto de datos.
+- Construcción del Índice de Eficiencia Energética.
+- Generación de la variable objetivo.
+- Entrenamiento de modelos supervisados.
+- Evaluación mediante métricas de clasificación.
+- Interpretabilidad mediante importancia de variables.
+- Exportación del modelo final.
+
+---
+
+# 3. Construcción del Índice de Eficiencia Energética (IEE)
+
+El conjunto de datos original no contenía una variable que representara el nivel de eficiencia energética del hogar, por lo que fue necesario construir un índice propio.
+
+Después del análisis exploratorio se determinó que:
+
+- `consumo_kwh` era la principal variable asociada al desempeño energético.
+- `cantidad_personas` permitía calcular el consumo relativo por habitante.
+- `temperatura_exterior` no presentó una relación significativa con el consumo.
+- `cantidad_equipos` y `uso_horario_pico` permanecían constantes y no aportaban capacidad discriminativa.
+
+El índice se construyó utilizando dos indicadores derivados:
+
+- **Eficiencia por consumo absoluto**
+- **Eficiencia por consumo por habitante**
+
+Ambos indicadores fueron normalizados mediante **Min-Max**, invirtiendo posteriormente la escala para que menores consumos representaran mayores niveles de eficiencia.
+
+La expresión utilizada fue:
+
+\[
+IEE=\left(\frac{E_{consumo}+E_{persona}}{2}\right)\times100
+\]
+
+El índice toma valores entre **0 y 100**, donde valores altos representan hogares más eficientes.
+
+---
+
+# 4. Entrenamiento y Evaluación
+
+Se entrenaron tres modelos supervisados:
+
+- Decision Tree
+- Random Forest
+- Gradient Boosting
+
+## Resultados
+
+| Modelo | Accuracy | Precision | Recall | F1 |
+|---------|---------:|----------:|--------:|------:|
+| Decision Tree | 0.96 | 0.96 | 0.96 | 0.96 |
+| Random Forest | 0.98 | 0.98 | 0.98 | 0.98 |
+| **Gradient Boosting** | **0.99** | **0.99** | **0.99** | **0.99** |
+
+Gradient Boosting obtuvo el mejor desempeño general y fue seleccionado como modelo definitivo para el proyecto.
+
+---
+
+# 5. Interpretabilidad
+
+El análisis de importancia de variables mostró que el modelo concentra prácticamente toda su capacidad predictiva en:
+
+- **consumo_kwh**
+- **cantidad_personas**
+
+Mientras que:
+
+- temperatura_exterior
+- cantidad_equipos
+- uso_horario_pico
+
+presentaron una contribución mínima o nula.
+
+<p align="center">
+<img src="figures/importancia_variables.png" width="650">
+</p>
+
+Estos resultados validan las decisiones tomadas durante la construcción del Índice de Eficiencia Energética.
+
+---
+
+# 6. Conclusiones
+
+- Se construyó exitosamente un Índice de Eficiencia Energética (IEE) para representar el desempeño energético de los hogares.
+- Se desarrolló un proceso reproducible para generar la variable objetivo del modelo.
+- Gradient Boosting obtuvo el mejor desempeño, alcanzando aproximadamente un **99 % de accuracy**.
+- El modelo fue exportado junto con los artefactos necesarios para su integración con la API de EnergiAI.
+
+---
+
+# 7. Recomendaciones
+
+- Mantener la misma estructura de variables durante la integración con la API.
+- Incrementar el volumen de datos utilizando registros provenientes de hogares reales.
+- Monitorear el desempeño del modelo conforme se incorporen nuevos datos.
+- Conservar las variables de baja importancia para permitir futuras reevaluaciones del modelo sin modificar la interfaz de entrada.
