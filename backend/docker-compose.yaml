@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:17.5
+    container_name: energiai-db
+    environment:
+      POSTGRES_PASSWORD: Gashu_bellu_517
+      POSTGRES_USER: postgres
+      POSTGRES_DB: energiai-db
+
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
