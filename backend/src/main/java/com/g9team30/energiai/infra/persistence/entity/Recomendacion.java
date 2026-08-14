@@ -1,4 +1,4 @@
-package com.g9team30.energiai.domain.analisis.model;
+package com.g9team30.energiai.infra.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
