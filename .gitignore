@@ -14,11 +14,5 @@ venv/
 
 # Sistema operativo
 .DS_Store
-Thumbs.db.idea/
-
-backend/src/main/resources/application.properties
-
-
-
-### IntelliJ IDEA ###
-.idea
+Thumbs.dbanalisis_datos/api/.env
+analisis_datos/api/.env
