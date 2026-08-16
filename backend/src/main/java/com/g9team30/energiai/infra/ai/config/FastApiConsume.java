@@ -1,21 +1,30 @@
-package com.g9team30.energiai.infra.ai.client;
-
+package com.g9team30.energiai.infra.ai.config;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
 @Configuration
 public class FastApiConsume {
 
+
+
     @Bean
-   public RestClient clientEnergiai(){
+   public RestClient clientEnergiai(@Value("${fastapi.base-url}")String baseUrl){
        return  RestClient.builder()
-               .baseUrl("https://.com")
+               .baseUrl(baseUrl)
                .defaultHeader("Content-Type", "application/json")
                .build();
 
+
    }
+
+
+
+
+
+
+
 
 
 

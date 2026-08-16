@@ -1,6 +1,7 @@
 package com.g9team30.energiai.domain.common.exceptions;
 
 import com.g9team30.energiai.domain.analisis.dto.response.ErrorResponse;
+import com.g9team30.energiai.infra.ai.client.exception.FastCommunicationException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,5 +52,12 @@ public class GlobalExceptionHandler {
         public DatosErrorValidacion(FieldError error) {
             this(error.getField(), error.getDefaultMessage());
         }
+    }
+
+    @ExceptionHandler(FastCommunicationException.class)
+    public ResponseEntity<String> handleFastApiCommunicationException(FastCommunicationException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_GATEWAY) // 502: el problema es con un servicio externo, no con tu API
+                .body(ex.getMessage());
     }
 }
