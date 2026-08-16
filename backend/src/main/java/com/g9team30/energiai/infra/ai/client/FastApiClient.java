@@ -3,6 +3,7 @@ package com.g9team30.energiai.infra.ai.client;
 
 import com.g9team30.energiai.domain.analisis.dto.request.AnalisisEnergeticoRequestDTO;
 import com.g9team30.energiai.domain.analisis.dto.response.AnalisisEnergeticoResponseDTO;
+import com.g9team30.energiai.domain.analisis.port.FastClientPort;
 import com.g9team30.energiai.infra.ai.client.exception.FastCommunicationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +14,11 @@ import org.springframework.web.client.RestClientException;
 
 @Component
 @RequiredArgsConstructor
-public class FastApiClient {
+public class FastApiClient implements FastClientPort {
 
     private final RestClient restClient;
 
+    @Override
     public AnalisisEnergeticoResponseDTO enviarAnalisis(AnalisisEnergeticoRequestDTO analisisRequest){
 
         try {

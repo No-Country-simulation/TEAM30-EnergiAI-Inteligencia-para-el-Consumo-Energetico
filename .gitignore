@@ -12,7 +12,11 @@ venv/
 # VS Code
 .vscode/
 
+# IntelliJ / IDEA
+.idea/
+
 # Sistema operativo
 .DS_Store
-Thumbs.dbanalisis_datos/api/.env
+Thumbs.db
+analisis_datos/api/.env
 analisis_datos/api/.env
