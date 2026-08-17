@@ -3,6 +3,7 @@ package com.g9team30.energiai.infra.persistence.entity;
 import com.g9team30.energiai.domain.common.enums.Categoria;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AnalisisEnergetico {
 
     @Id
