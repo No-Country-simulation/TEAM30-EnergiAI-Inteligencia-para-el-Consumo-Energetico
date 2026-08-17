@@ -38,6 +38,7 @@ public class AnalisisService {
                                                AnalisisEnergeticoResponseDTO analisisEnergeticoResponse) {
 
         return AnalisisEnergetico.builder()
+                .usuarioId(request.getUsuarioId())
                 .consumoKwh(request.getConsumoKwh())
                 .usoHorarioPico(request.getUsoHorarioPico())
                 .cantidadPersonas(request.getCantidadPersonas())
