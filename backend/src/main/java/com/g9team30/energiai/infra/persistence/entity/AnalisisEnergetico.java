@@ -18,6 +18,8 @@ public class AnalisisEnergetico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "usuario_id")
+    private Integer usuarioId;
     @Column(name = "consumo_kwh")
     private Double consumoKwh;
     @Column(name = "uso_horario_pico")

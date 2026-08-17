@@ -2,9 +2,7 @@ package com.g9team30.energiai.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Validated
 @RestController
@@ -12,7 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AnalisisController {
 
+    @PostMapping
+    public void createAnalysis() {
+        // TODO: conectar con el Service
+    }
 
+    @GetMapping("/{id}")
+    public void getAnalysisById(@PathVariable Integer id) {
+        // TODO: conectar con el Service
+    }
 
-
+    @GetMapping
+    public void getAllAnalysis() {
+        // TODO: conectar con el Service
+    }
 }
