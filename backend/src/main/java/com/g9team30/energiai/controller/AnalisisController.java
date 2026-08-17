@@ -28,6 +28,7 @@ public class AnalisisController {
         );
     }
 
+    /*
     @GetMapping("/{id}")
     public ResponseEntity<AnalisisEnergeticoResponseDTO> getAnalysisById(
             @PathVariable Integer id) {
@@ -45,4 +46,5 @@ public class AnalisisController {
                 analisisService.getAllAnalysis(usuarioId)
         );
     }
+    */
 }
