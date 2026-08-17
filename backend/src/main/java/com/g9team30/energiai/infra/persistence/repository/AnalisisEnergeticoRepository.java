@@ -9,6 +9,10 @@ import java.util.List;
 
 @Repository
 public interface AnalisisEnergeticoRepository extends JpaRepository<AnalisisEnergetico, Integer> {
+
+
+    List<AnalisisEnergetico> findByUsuarioId(Integer usuarioId);
+
     List<AnalisisEnergetico> findByCategoria(Categoria categoria);
 
     List<AnalisisEnergetico> findByOrderByFechaAnalisisDesc();

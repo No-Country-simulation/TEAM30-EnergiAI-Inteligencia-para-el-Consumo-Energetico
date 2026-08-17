@@ -8,6 +8,11 @@ import lombok.Data;
 @Data
 public class AnalisisEnergeticoRequestDTO {
 
+    @JsonProperty("usuario_id")
+    @NotNull
+    @Positive
+    private Integer usuarioId;
+
     @JsonProperty("consumo_kwh")
     @NotNull
     @Positive
