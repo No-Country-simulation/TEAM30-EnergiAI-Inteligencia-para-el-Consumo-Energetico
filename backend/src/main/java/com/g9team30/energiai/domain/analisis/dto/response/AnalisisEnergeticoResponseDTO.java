@@ -1,11 +1,13 @@
 package com.g9team30.energiai.domain.analisis.dto.response;
 
 import com.g9team30.energiai.domain.common.enums.Categoria;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@Builder
 public class AnalisisEnergeticoResponseDTO {
 
     private Categoria categoria;
