@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FastApiClient implements FastClientPort {
@@ -39,7 +40,7 @@ public class FastApiClient implements FastClientPort {
                     .body(AnalisisEnergeticoResponseDTO.class);
 
         } catch (RestClientException e) {
-
+            log.error("Error real al comunicarse con FastAPI: ", e);
             throw new FastCommunicationException(
                     "No se pudo establecer comunicación con FastAPI", e);
         }

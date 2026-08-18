@@ -37,6 +37,10 @@ public class AnalisisEnergetico {
     private Double probabilidad;
     @Column(name = "costo_estimado_mensual")
     private Double costoEstimadoMensual;
+    @Column(name = "ahorro_potencial_mensual")
+    private Double ahorroPotencialMensual;
+    @Column(name = "ahorro_potencial_anual")
+    private Double ahorroPotencialAnual;
     @Column(name = "fecha_analisis")
     private LocalDateTime fechaAnalisis;
     @Column(name = "temperatura_exterior")

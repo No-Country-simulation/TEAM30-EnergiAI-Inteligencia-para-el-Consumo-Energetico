@@ -28,7 +28,7 @@ public class AnalisisController {
         );
     }
 
-    /*
+
     @GetMapping("/{id}")
     public ResponseEntity<AnalisisEnergeticoResponseDTO> getAnalysisById(
             @PathVariable Integer id) {
@@ -38,13 +38,13 @@ public class AnalisisController {
         );
     }
 
-    @GetMapping
+    @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<AnalisisEnergeticoResponseDTO>> getAllAnalysis(
-            @RequestParam Integer usuarioId) {
+            @PathVariable Integer usuarioId) {
 
         return ResponseEntity.ok(
-                analisisService.getAllAnalysis(usuarioId)
+                analisisService.getAnalisisListUserId(usuarioId)
         );
     }
-    */
+
 }
