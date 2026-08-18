@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pydantic-settings
+langchain
+langchain-cohere
+cohere
+joblib
+pandas
+scikit-learn

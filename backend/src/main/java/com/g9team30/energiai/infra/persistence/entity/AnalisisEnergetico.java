@@ -3,6 +3,7 @@ package com.g9team30.energiai.infra.persistence.entity;
 import com.g9team30.energiai.domain.common.enums.Categoria;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,11 +14,14 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AnalisisEnergetico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "usuario_id")
+    private Integer usuarioId;
     @Column(name = "consumo_kwh")
     private Double consumoKwh;
     @Column(name = "uso_horario_pico")
@@ -33,6 +37,10 @@ public class AnalisisEnergetico {
     private Double probabilidad;
     @Column(name = "costo_estimado_mensual")
     private Double costoEstimadoMensual;
+    @Column(name = "ahorro_potencial_mensual")
+    private Double ahorroPotencialMensual;
+    @Column(name = "ahorro_potencial_anual")
+    private Double ahorroPotencialAnual;
     @Column(name = "fecha_analisis")
     private LocalDateTime fechaAnalisis;
     @Column(name = "temperatura_exterior")

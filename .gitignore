@@ -12,13 +12,11 @@ venv/
 # VS Code
 .vscode/
 
+# IntelliJ / IDEA
+.idea/
+
 # Sistema operativo
 .DS_Store
-Thumbs.db.idea/
+Thumbs.db
+analisis_datos/api/.env
 
-backend/src/main/resources/application.properties
-
-
-
-### IntelliJ IDEA ###
-.idea
