@@ -35,18 +35,19 @@ El proyecto busca identificar patrones de consumo, calcular un Índice de Eficie
 ## 🏗️ Arquitectura y Tecnologías
 
 La solución está compuesta por los siguientes componentes:
-* **Frontend:** (Por definir).
+* **Frontend:** Interfaz de usuario intuitiva y responsiva para la interacción con el sistema.
 * **Backend:** Desarrollado en **Java 21** con el framework **Spring Boot**. Implementa **Spring Security** para la protección y autenticación de la API, **Spring Data JPA** para la persistencia, **Flyway** para el control de versiones y migraciones de la base de datos, y **Lombok** para la optimización del código. El motor de base de datos utilizado es **PostgreSQL**.
 * **Inteligencia Artificial:** Microservicio desarrollado con FastAPI (Python) y modelo de Machine Learning (Scikit-Learn) serializado en formato `.pkl`.
 * **Infraestructura:** Despliegue sobre Oracle Cloud Infrastructure (OCI).
-* **Testing:** Pruebas de integración y API realizadas con Postman.
+* **Testing:** Pruebas de integración y API realizadas con Postman y scripts automatizados de QA.
 
 ### Estado de la arquitectura
-* ✅ Arquitectura definida.
-* ✅ Microservicio de Inteligencia Artificial desarrollado.
-* 🚧 Integración con Backend en desarrollo.
+* ✅ Arquitectura general definida.
+* ✅ Microservicio de Inteligencia Artificial implementado.
+* ✅ Backend en Spring Boot finalizado.
+* ✅ Frontend integrado y comunicando exitosamente.
 
-> *Nota: El diagrama de arquitectura se encuentra documentado en la Wiki del proyecto y será actualizado conforme avance el desarrollo.*
+> *Nota: El diagrama de arquitectura se encuentra documentado en la Wiki del proyecto.*
 
 ---
 
@@ -60,34 +61,45 @@ El equipo de Ciencia de Datos completó todas las etapas planificadas para el de
 * **CD3 – Modelado:** Construcción del IEE, entrenamiento y comparación de modelos, evaluación y exportación del modelo seleccionado en `.pkl`. *(Finalizado)*
 * **CD4 – Inteligencia de Negocio e Integración:** Desarrollo del motor de recomendaciones, simulaciones de consumo, cálculo de costos/ahorros y desarrollo del microservicio FastAPI. *(Finalizado)*
 
-### 🧪 Testing y QA ✅
-Se desarrolló y ejecutó un script de validación de integración que superó con un **100% de éxito** las pruebas sobre el modelo y las reglas de negocio, incluyendo:
-* Validación del Contrato API v2.0 (entradas y salidas).
-* Exactitud de los cálculos financieros (costos y ahorros).
-* Respuesta ante Casos Extremos (Out of Domain) documentados.
+### ⚙️ Backend ✅
+El equipo de Backend definió el dominio, las reglas de comunicación y finalizó la integración con el microservicio de Inteligencia Artificial.
 
-### ⚙️ Backend 🚧
-Actualmente el equipo de Backend se encuentra desarrollando la integración de la aplicación con el microservicio de Inteligencia Artificial.
+**Modelo de Dominio y Entidades:**
+* **AnalisisEnergetico:** Representa el resultado del análisis. Campos principales: `id`, `usuarioId`, `consumoKwh`, `usoHorarioPico`, `cantidadPersonas`, `cantidadEquipos`, `categoria`, `probabilidad`, `costoEstimadoMensual`, `fechaAnalisis`, `temperaturaExterior`.
+* **Recomendacion:** Generada a partir del análisis. Cada recomendación pertenece a un único análisis. Campos: `id`, `descripcion`, `analisis_id`.
+* **Categoria (Enum):** Valores de clasificación energética: `EFICIENTE`, `MODERADO`, `INEFICIENTE`.
 
-* Integración de Spring Boot con el microservicio en FastAPI.
-* Consumo de la API REST del modelo de IA.
-* Integración de las respuestas dentro del flujo de la aplicación.
-* Pruebas de integración y validación de la comunicación. *(En desarrollo)*
+**API REST y Base de Datos:**
+* **Endpoints Completados:** `POST /analisis`, `GET /analisis/{id}`, y `GET /analisis/usuario/{usuarioId}`.
+* **Persistencia:** Utiliza PostgreSQL con Spring Data JPA. El control de versiones se administra con Flyway (Migraciones V1 a V4 implementando tablas, claves foráneas e índices).
 
-### 🎨 Frontend (Por definir)
-* Diseño de interfaces de usuario.
-* Consumo de APIs del backend.
-* Visualización de datos y recomendaciones.
+### 🎨 Frontend ✅
+Se desarrolló una interfaz web funcional que permite al usuario interactuar fluidamente con el motor de predicción.
+* **Ingreso de datos:** Formulario accesible para registrar las variables de consumo del hogar.
+* **Integración API:** Consumo exitoso de los endpoints de Spring Boot para la creación y recuperación de análisis.
+* **Visualización de resultados:** Presentación clara del perfil energético, nivel de confianza, impacto económico (ahorros estimados) y el listado de recomendaciones dinámicas.
+
+### 🧪 Testing y Aseguramiento de Calidad (QA) ✅
+La suite automatizada audita el sistema de forma modular y End-to-End, garantizando la fiabilidad técnica del producto:
+
+* **Base de Datos (test_qa_database.py):** Verifica la aplicación estricta de migraciones Flyway, claves foráneas e índices en PostgreSQL. **(Éxito: 100.0%)**
+* **Microservicio IA (test_qa_fastapi.py):** Valida exactitud de cálculos matemáticos, inyección de payloads y robustez ante datos inválidos. **(Éxito: 95.3%)**
+* **Backend Spring (test_qa_backend.py):** Certifica operaciones CRUD, enrutamiento y manejo de caídas de servicios. **(Éxito: 92.0%)**
+* **Flujo Completo E2E (test_qa_e2e.py):** Simula el viaje completo de la información, asegurando mutaciones correctas entre microservicios y consistencia en base de datos. **(Éxito: 100.0%)**
+
+**Configuración del Entorno de Pruebas:**
+Requiere dependencias de Python (`psycopg2-binary`, `pydantic-settings`), Java 21 y Docker. Se inicia PostgreSQL, luego FastAPI en el puerto 8000 y finalmente Spring Boot inyectando variables de entorno.
+
+### 🐛 Registro y Resolución de Incidencias
+Durante las pruebas de QA, se registraron observaciones (como el endpoint de salud del Backend y la raíz de FastAPI) que el equipo ha ido mitigando de cara al despliegue final en producción.
 
 ---
 
 ## 🛤️ Próximos pasos
 
-1. Finalizar la integración entre Spring Boot y el microservicio de Inteligencia Artificial.
-2. Validar el intercambio de datos mediante la API REST.
-3. Realizar pruebas funcionales de extremo a extremo.
-4. Desplegar los componentes en Oracle Cloud Infrastructure (OCI).
-5. Preparar la solución para la demostración final del hackathon.
+1. Desplegar los componentes finales en Oracle Cloud Infrastructure (OCI).
+2. Ensayo del pitch y grabación del video de demostración de la plataforma.
+3. Presentación oficial de EnergiAI ante el jurado del hackathon.
 
 ---
 
@@ -113,5 +125,6 @@ Actualmente el equipo de Backend se encuentra desarrollando la integración de l
 <br>
 
 <div align="center">
-  <i>Última actualización: 10 de agosto de 2026</i><br>
-  
+  <i>Última actualización: 21 de agosto de 2026</i><br>
+
+</div>
