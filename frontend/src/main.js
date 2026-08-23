@@ -79,7 +79,7 @@ document.querySelector('#app').innerHTML = `
               for="usuario-id"
               class="mb-2 block text-sm text-slate-300"
             >
-              Usuario ID
+              Número de Cliente
             </label>
 
             <input
@@ -186,7 +186,7 @@ document.querySelector('#app').innerHTML = `
               for="uso-horario-pico"
               class="text-sm text-slate-300"
             >
-              Uso de equipos en horario pico
+              Uso de equipos en horario pico (7pm - 11pm)
             </label>
 
           </div>
@@ -284,7 +284,7 @@ document.querySelector('#app').innerHTML = `
         <div class="rounded-2xl border border-slate-800 bg-slate-900 p-6">
 
           <h3 class="mb-2 text-xl font-semibold">
-            Buscar por usuario
+            Buscar por número de cliente
           </h3>
 
           <p class="mb-5 text-sm text-slate-400">
