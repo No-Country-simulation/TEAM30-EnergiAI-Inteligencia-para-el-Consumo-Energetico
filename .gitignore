@@ -20,3 +20,6 @@ venv/
 Thumbs.db
 analisis_datos/api/.env
 
+# Node
+frontend/node_modules/
+
