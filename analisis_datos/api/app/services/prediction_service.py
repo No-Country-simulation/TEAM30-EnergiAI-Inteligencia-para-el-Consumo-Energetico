@@ -5,6 +5,8 @@ realizar predicciones sobre el consumo energético.
 
 from pathlib import Path
 import logging
+from urllib.request import urlopen
+from urllib.error import URLError, HTTPError
 
 import joblib
 import pandas as pd
@@ -29,9 +31,62 @@ class PredictionService:
         """
         self._model = self._load_model()
 
+    def _download_model(self, model_path: Path) -> None:
+        """
+        Descarga el modelo desde Oracle Cloud Infrastructure.
+
+        Parameters
+        ----------
+        model_path : Path
+            Ruta local donde se almacenará el modelo.
+
+        Raises
+        ------
+        ValueError
+            Si no se configuró la URL del modelo.
+        RuntimeError
+            Si ocurre un error durante la descarga.
+        """
+        if not settings.model_bucket_url:
+            logger.error(
+                "MODEL_BUCKET_URL no está configurado para MODEL_SOURCE=oci."
+            )
+            raise ValueError(
+                "MODEL_BUCKET_URL es obligatorio cuando MODEL_SOURCE=oci."
+            )
+
+        logger.info(
+            "Descargando modelo desde OCI: %s",
+            settings.model_bucket_url,
+        )
+
+        try:
+            # Crear el directorio si todavía no existe.
+            model_path.parent.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+
+            with urlopen(settings.model_bucket_url) as response:
+                model_path.write_bytes(response.read())
+
+            logger.info(
+                "Modelo descargado correctamente en: %s",
+                model_path,
+            )
+
+        except (HTTPError, URLError, OSError) as exc:
+            logger.exception(
+                "Error al descargar el modelo desde OCI."
+            )
+            raise RuntimeError(
+                "No se pudo descargar el modelo desde OCI."
+            ) from exc
+
     def _load_model(self):
         """
-        Carga el modelo entrenado desde el sistema de archivos.
+        Carga el modelo entrenado desde el sistema de archivos
+        o lo descarga desde OCI cuando MODEL_SOURCE=oci.
 
         Returns
         -------
@@ -41,21 +96,81 @@ class PredictionService:
         Raises
         ------
         FileNotFoundError
-            Si el archivo del modelo no existe.
+            Si el modelo local no existe y no puede descargarse.
+        ValueError
+            Si la configuración de MODEL_SOURCE no es válida.
         """
         model_path = Path(settings.model_path)
 
-        logger.info("Cargando modelo desde: %s", model_path)
+        logger.info(
+            "Origen del modelo configurado: %s",
+            settings.model_source,
+        )
 
+        # --------------------------------------------------------------
+        # Modelo desde OCI
+        # --------------------------------------------------------------
+        if settings.model_source.lower() == "oci":
+
+            if not model_path.exists():
+                logger.info(
+                    "El modelo no existe localmente. "
+                    "Se descargará desde OCI."
+                )
+
+                self._download_model(model_path)
+
+            else:
+                logger.info(
+                    "Modelo encontrado localmente. "
+                    "No es necesario descargarlo."
+                )
+
+        # --------------------------------------------------------------
+        # Modelo local
+        # --------------------------------------------------------------
+        elif settings.model_source.lower() == "local":
+
+            logger.info(
+                "Utilizando modelo local."
+            )
+
+        # --------------------------------------------------------------
+        # Origen no válido
+        # --------------------------------------------------------------
+        else:
+            logger.error(
+                "MODEL_SOURCE no válido: %s",
+                settings.model_source,
+            )
+
+            raise ValueError(
+                "MODEL_SOURCE debe ser 'local' o 'oci'."
+            )
+
+        # --------------------------------------------------------------
+        # Verificar que el modelo exista antes de cargarlo
+        # --------------------------------------------------------------
         if not model_path.exists():
-            logger.error("No se encontró el modelo en %s", model_path)
+            logger.error(
+                "No se encontró el modelo en %s",
+                model_path,
+            )
+
             raise FileNotFoundError(
                 f"No se encontró el modelo: {model_path}"
             )
 
+        logger.info(
+            "Cargando modelo desde: %s",
+            model_path,
+        )
+
         model = joblib.load(model_path)
 
-        logger.info("Modelo cargado correctamente.")
+        logger.info(
+            "Modelo cargado correctamente."
+        )
 
         return model
 
