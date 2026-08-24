@@ -23,6 +23,7 @@ target/
 src/main/resources/application-dev.properties
 
 
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
