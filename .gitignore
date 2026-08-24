@@ -22,4 +22,6 @@ analisis_datos/api/.env
 
 # Node
 frontend/node_modules/
-
+frontend/.env
+frontend/.env.development
+frontend/.env.production
